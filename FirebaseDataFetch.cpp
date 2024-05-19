@@ -48,7 +48,7 @@ void getJsonData()
     else if (currentTime.weekday == 5)
     {
         hariLibur = false;
-        fetchDataFromFirebase("jumat");
+        fetchDataFromFirebase("JUMAT");
         Serial.println("Memperoleh jadwal Jum'at");
     }
     else

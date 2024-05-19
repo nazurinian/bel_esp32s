@@ -6,7 +6,6 @@
 #include "Structs.h"
 #include "Variables.h"
 
-// Deklarasi fungsi untuk mengambil elemen waktu saat ini
 CustomTime getCurrentTime(NTPClient &timeClient);
 
 #endif

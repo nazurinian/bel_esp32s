@@ -2,17 +2,33 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define BUTTON1PIN 14 // 3 (14)
-#define BUTTON2PIN 27 // 2 (12)
-#define LEDPIN 2  // Lampu biru bawaan ESP32
-#define LED1REDPIN 12 // 4 - 27 (27)
-#define LED2GREENPIN 13 // 1 (13)
-#define DFPLAYERVOLUMEPIN 32 // 26 keatas kosong || 27 kebawah full
-#define DFPLAYERBUSYPIN 23
+#define BUTTON_1_PIN 14    // Tombol 1 (Pin 14)
+#define BUTTON_2_PIN 27    // Tombol 2 (Pin 27)
+#define LED_PIN 2     // Lampu LED (Pin 2, default untuk ESP32)
+#define LED_1_RED_PIN 12    // LED Merah 1 (Pin 12)
+#define LED_2_GREEN_PIN 13    // LED Hijau 2 (Pin 13)
+#define DFPLAYER_VOLUME_PIN 32   // Pin untuk mengendalikan volume DFPlayer (Pin 32)
+#define DFPLAYER_BUSY_PIN 23     // Pin untuk mendeteksi keadaan sibuk DFPlayer (Pin 23)
 
 #define API_KEY "AIzaSyBj8BvP9fbpHe82STphSUZqF1ZY1TirRXY" 
 #define DATABASE_URL "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app"
 #define DATABASE_SECRET_KEY "G3cm9Lall4qO6PuxtaDdMPb5SNtpuvytzJGI90Va"
 #define FIREBASE_USE_PSRAM
+
+#define AP_SSID "BSIB-AP"
+#define AP_PASSWORD "config123"
+
+#define SENIN_SAMPAI_KAMIS "/jadwal/senin-kamis/"
+#define JUMAT "/jadwal/JUMAT/"
+#define JAM_MASUK "/jam/"
+#define MENIT_MASUK "/menit/"
+#define STATUS_MASUK "/aktif/"
+
+#define PUTAR_MANUAL "/putar-manual"
+#define STATUS_PUTAR "/putar"
+#define PILIHAN_PUTAR "/choice"
+
+#define GMT_OFFSET_SEC (7 * 3600)
+#define JUMLAH_JADWAL 16
 
 #endif

@@ -1,8 +1,8 @@
 #include "AudioManager.h"
 
-void putarBelKelas(int pilihanPutar)
+void putarBelKelas(int pilihan)
 {
-    switch (pilihanPutar)
+    switch (pilihan)
     {
     case 1:
         // Bel Literasi Pagi
@@ -38,8 +38,6 @@ void putarBelKelas(int pilihanPutar)
 
 void cekWaktu(JadwalData masuk, int jamKe)
 {
-    // CustomTime currentTime = getCurrentTime(); // Waktu saat ini
-
     // Cocokkan waktu untuk 5 menit sebelum masuk kelas
     CustomTime waktu5MenitSebelumMasuk = currentTime;
     waktu5MenitSebelumMasuk.minutes -= 5;
@@ -107,7 +105,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
 
 void putarBelOtomatis(JsonDocument &json)
 {
-    if (!digitalRead(DFPLAYERBUSYPIN))
+    if (!digitalRead(DFPLAYER_BUSY_PIN))
     {
         delay(100);
         return;
@@ -136,7 +134,7 @@ void cekPemutaranManualLebih1x()
         if (loopPlay - previousLoopCheck >= intervalCheck)
         {
             previousLoopCheck = loopPlay;
-            if (digitalRead(DFPLAYERBUSYPIN))
+            if (digitalRead(DFPLAYER_BUSY_PIN))
             {
                 playState = 2;
             }
@@ -152,11 +150,11 @@ void cekPemutaranManualLebih1x()
         if (loopPlay - previousLoopCheck >= intervalCheck)
         {
             previousLoopCheck = loopPlay;
-            if (digitalRead(DFPLAYERBUSYPIN))
+            if (digitalRead(DFPLAYER_BUSY_PIN))
             {
                 playState = 0;
-                Firebase.setBool(fbdo, putarManual + statusPutar, false);
-                Firebase.setInt(fbdo, putarManual + pilihanPutar, 0);
+                Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
+                Firebase.setInt(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
             }
         }
         break;
@@ -170,15 +168,15 @@ void putarBelManual(bool mainkan, int choice)
         return;
     }
 
-    if (!digitalRead(DFPLAYERBUSYPIN))
+    if (!digitalRead(DFPLAYER_BUSY_PIN))
     {
-        // if (!cekBelManual())
-        // {
-        //     Serial.print("Menghentikan pemutaran audio");
-        //     sedangMemutarAudio = false;
-        //     myDFPlayer.stop();
-        //     return;
-        // }
+        if (!infoPlay)
+        {
+            Serial.print("Menghentikan pemutaran audio");
+            sedangMemutarAudio = false;
+            myDFPlayer.stop();
+            return;
+        }
 
         Serial.println("Sedang memutar bel / audio");
         delay(100);
@@ -189,8 +187,8 @@ void putarBelManual(bool mainkan, int choice)
     {
         sedangMemutarAudio = false;
         Serial.println("Bel selesai diputar");
-        Firebase.setBool(fbdo, putarManual + statusPutar, false);
-        Firebase.setInt(fbdo, putarManual + pilihanPutar, 0);
+        Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
+        Firebase.setInt(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
         delay(100);
         return;
     }

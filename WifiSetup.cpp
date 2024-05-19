@@ -59,7 +59,7 @@ void wifiSetup()
   // Menonaktifkan Bluetooth
   startWifiConfig = false;
   lampuStatus = false;
-  digitalWrite(LED1REDPIN, LOW);
+  digitalWrite(LED_1_RED_PIN, LOW);
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
@@ -82,76 +82,86 @@ void wifiSetup()
   delay(100);
 }
 
-// void startConfigServer() {
-//   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
+void startConfigServer()
+{
+  Serial.println("\nMemulai hotspot konfigurasi WiFi.");
 
-//   // Mengatur mode AP
-//   // Mode simple tanpa password (Hanya SSID)
-//   if(apSSID == ""){
-//     Serial.println("SSID Kosong, SSID Default: WiFi Manager");
-//     apSSID = "WiFi Manager";
-//   }
+  // Mengatur mode AP
+  // Mode simple tanpa password (Hanya SSID)
+  // if (AP_SSID == "")
+  // {
+  //   Serial.println("SSID Kosong, SSID Default: WiFi Manager");
+  //   AP_SSID = "WiFi Manager";
+  // }
 
-//   if(apPassword == ""){
-//     WiFi.softAP(apSSID);
-//   }
-//   else{
-//     WiFi.softAP(apSSID, apPassword);
-//   }
+  if (AP_PASSWORD == "")
+  {
+    WiFi.softAP(AP_SSID);
+  }
+  else
+  {
+    WiFi.softAP(AP_SSID, AP_PASSWORD);
+  }
 
-//   IPAddress IP = WiFi.softAPIP();
-//   Serial.print("Alamat IP AP: ");
-//   Serial.println(IP);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("Alamat IP AP: ");
+  Serial.println(IP);
 
-//   // Menentukan handle untuk root endpoint ("/")
-//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-//     // Membaca isi file HTML dari SPIFFS dan mengirimkannya sebagai respons
-//     File file = SPIFFS.open("/index.html", "r");
-//     if (file) {
-//       request->send(SPIFFS,  "/index.html", "text/html", false);
-//     } else {
-//       request->send(404, "text/plain", "Halaman tidak ditemukan.");
-//     }
-//   });
+  // Menentukan handle untuk root endpoint ("/")
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    // Membaca isi file HTML dari SPIFFS dan mengirimkannya sebagai respons
+    File file = SPIFFS.open("/index.html", "r");
+    if (file) {
+      request->send(SPIFFS,  "/index.html", "text/html", false);
+    } else {
+      request->send(404, "text/plain", "Halaman tidak ditemukan.");
+    } });
 
-//   // Menentukan handle untuk endpoint "/set-credentials"
-//   server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request) {
-//     // Mendapatkan SSID dan password dari formulir yang disubmit
-//     String newSSID = request->arg("ssid");
-//     String newPassword = request->arg("password");
+  // Menentukan handle untuk endpoint "/set-credentials"
+  server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+    // Mendapatkan SSID dan password dari formulir yang disubmit
+    String newSSID = request->arg("ssid");
+    String newPassword = request->arg("password");
 
-//     // Menyimpan SSID dan password ke dalam file SPIFFS
-//     saveCredentials(newSSID, newPassword);
+    // Menyimpan SSID dan password ke dalam file SPIFFS
+    saveCredentials(newSSID, newPassword);
 
-//     // Mengirim respons bahwa perubahan berhasil
-//     request->send(200, "text/plain", "SSID dan password berhasil diperbarui. Perangkat akan direstart.");
-//     delay(1000);
+    // Mengirim respons bahwa perubahan berhasil
+    request->send(200, "text/plain", "SSID dan password berhasil diperbarui. Perangkat akan direstart.");
+    delay(1000);
 
-//     // Merestart perangkat setelah merubah konfigurasi
-//     ESP.restart();
-//   });
+    // Merestart perangkat setelah merubah konfigurasi
+    ESP.restart(); });
 
-//   // Memulai server web
-//   server.begin();
-// }
+  // Memulai server web
+  server.begin();
+}
 
-// void startHotspot() {
-//   button2State = digitalRead(BUTTON2PIN );
-//   if (button2State == LOW) {
-//     while (button2State == LOW) {
-//       delay(10);
-//     }
+void startHotspot()
+{
+  button2State = digitalRead(BUTTON_2_PIN);
+  if (button2State == LOW)
+  {
+    while (button2State == LOW)
+    {
+      delay(10);
+    }
 
-//     hotspotStatus = !hotspotStatus;
-//     digitalWrite(LED2GREENPIN, hotspotStatus ? HIGH : LOW);
+    hotspotStatus = !hotspotStatus;
+    digitalWrite(LED_2_GREEN_PIN, hotspotStatus ? HIGH : LOW);
 
-//     if (hotspotStatus) {
-//       startConfigServer();
-//       delay(100);
-//     } else {
-//       Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
-//       WiFi.softAPdisconnect(true);
-//       delay(100);
-//     }
-//   }
-// }
+    if (hotspotStatus)
+    {
+      startConfigServer();
+      delay(100);
+    }
+    else
+    {
+      Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
+      WiFi.softAPdisconnect(true);
+      delay(100);
+    }
+  }
+}

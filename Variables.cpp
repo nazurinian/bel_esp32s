@@ -5,36 +5,27 @@ LiquidCrystal_I2C LCD(0x27, 16, 2);
 BluetoothSerial SerialBT;
 
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", gmtOffset_sec);
+NTPClient timeClient(ntpUDP, "pool.ntp.org", GMT_OFFSET_SEC);
 
 FirebaseData fbdo;
 FirebaseData stream;
-// FirebaseData streamPutar;
-// FirebaseData streamChoice;
 
 FirebaseAuth auth;
 FirebaseConfig config;
 DynamicJsonDocument json(10240);
 
-// AsyncWebServer server(81);
+AsyncWebServer server(81);
 DFRobotDFPlayerMini myDFPlayer;
 
 bool signupOK = false;
 bool dataIsAvailable = false;
 bool hariLibur = false;
 
-const char *apSSID = "BSIB-AP";
-const char *apPassword = ""; // config123
-
 unsigned long previousMillisA = 0;
 unsigned long previousMillisB = 0;
+unsigned long previousMillisC = 0;
 unsigned long previousMillisResetWifi = 0;
 const long interval = 1000;
-
-unsigned long previousMillisSignup = 0;
-unsigned long previousMillisTokenRefresh = 0;
-unsigned long previousMillisCheckManual = 0;
-unsigned long previousMillisJsonData = 0;
 
 int button1State = 0;
 bool menuDisplayed = false;
@@ -46,17 +37,6 @@ bool displayNextSchedule = false;
 bool clearDisplayOffline = true;
 
 int volumeLevel = 0;
-
-// Path jadwal masuk dan keluar pada database
-const String seninSampaiKamis = "/jadwal/senin-kamis/";
-const String jumat = "/jadwal/jumat/";
-const String jamMasuk = "/jam/";
-const String menitMasuk = "/menit/";
-const String statusMasuk = "/aktif/";
-
-const String putarManual = "/putar-manual";
-const String statusPutar = "/putar";
-const String pilihanPutar = "/choice";
 bool sedangMemutarAudio = false;
 
 int playState = 0; // 0: tidak memutar, 1: memutar pertama, 2: memutar kedua
@@ -64,17 +44,16 @@ unsigned long loopPlay = millis();
 unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
 unsigned long intervalCheck = 200;   // Interval untuk memeriksa status DFPlayer
 
-const long gmtOffset_sec = 7 * 3600;
 String newSSIDBT = "";
 String newPasswordBT = "";
 
 bool lampuStatus = false;
 bool startWifiConfig = false;
 int button2State = 0;
+bool hotspotStatus = false;
 
 // Array untuk menyimpan semua jadwal
-const int jumlahJadwal = 16;
-Waktu jadwal[jumlahJadwal] = {
+Waktu jadwal[JUMLAH_JADWAL] = {
     {7, 10},  // 1 (Literasi Pagi)
     {7, 30},  // 2
     {8, 0},   // 3
@@ -158,39 +137,6 @@ Schedule jadwalSaatIni;
 Schedule jadwalSelanjutnya;
 String nowOrNext;
 String timeOrBel;
-
-/* int cekBelPilihan()
-{
-  if (Firebase.getInt(fbdo, pilihanPutar))
-  {
-    int infoPilihanPutar = fbdo.intData();
-    return infoPilihanPutar;
-  }
-  else
-  {
-    return 0;
-  }
-}
-
-bool cekBelManual()
-{
-  if (Firebase.getBool(fbdo, statusPutar))
-  {
-    bool infoPlay = fbdo.boolData();
-    if (infoPlay)
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  else
-  {
-    return false;
-  }
-} */
 
 bool infoPlay;
 int infoPilihanPutar;

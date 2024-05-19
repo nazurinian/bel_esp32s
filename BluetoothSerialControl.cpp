@@ -17,14 +17,10 @@ void stopBluetooth() {
 
 void serialBTMonitor()
 {
-  button1State = digitalRead(BUTTON1PIN);
+  button1State = digitalRead(BUTTON_1_PIN);
 
   if (!lampuStatus && !startWifiConfig)
   {
-    // SerialBT.end(); // Menonaktifkan Bluetooth Serial
-    // Serial.println("Bluetooth Serial dinonaktifkan");
-
-    // delay(1000);
     stopBluetooth();
     startWifiConfig = true;
   }
@@ -38,7 +34,7 @@ void serialBTMonitor()
   if (button1State == LOW)
   { //
     // Tunggu hingga tombol dilepas
-    while (digitalRead(BUTTON1PIN) == LOW)
+    while (digitalRead(BUTTON_1_PIN) == LOW)
     {
       delay(10);
     }
@@ -47,7 +43,7 @@ void serialBTMonitor()
     lampuStatus = !lampuStatus;
 
     // Update keadaan lampu
-    digitalWrite(LED1REDPIN, lampuStatus ? HIGH : LOW);
+    digitalWrite(LED_1_RED_PIN, lampuStatus ? HIGH : LOW);
 
     if (lampuStatus)
     {
@@ -59,10 +55,6 @@ void serialBTMonitor()
     else
     {
       stopBluetooth();
-      // SerialBT.end(); // Menonaktifkan Bluetooth Serial
-      // Serial.println("\nBluetooth Serial dinonaktifkan");
-
-      // delay(1000);
     }
   }
 }
@@ -181,8 +173,8 @@ void handleBluetoothMenu(int choice)
       break;
     }
 
-    Firebase.setBool(fbdo, putarManual + statusPutar, true);
-    Firebase.setInt(fbdo, putarManual + pilihanPutar, 1); // MASIH 1 ya blum ada choice nya
+    Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), true);
+    Firebase.setInt(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 1); // MASIH 1 ya blum ada choice nya
 
     // Tambahkan fungsi choice seperti ganti ssid dan passwordnya
 
@@ -204,11 +196,11 @@ void handleBluetoothMenu(int choice)
       break;
     }
 
-    if (!digitalRead(DFPLAYERBUSYPIN))
+    if (!digitalRead(DFPLAYER_BUSY_PIN))
     {
       SerialBT.print("Menghentikan pemutaran audio");
-      Firebase.setBool(fbdo, putarManual + statusPutar, false);
-      Firebase.setInt(fbdo, putarManual + pilihanPutar, 0);
+      Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
+      Firebase.setInt(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
       myDFPlayer.stop();
     }
     else
@@ -222,7 +214,7 @@ void handleBluetoothMenu(int choice)
     // Menonaktifkan Bluetooth
     startWifiConfig = false;
     lampuStatus = false;
-    digitalWrite(LED1REDPIN, LOW);
+    digitalWrite(LED_1_RED_PIN, LOW);
     stopBluetooth();
     // SerialBT.end();
     // delay(1000);

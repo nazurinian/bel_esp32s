@@ -8,7 +8,7 @@
 #include "Config.h"
 #include "Variables.h"
 
-void putarBelKelas(int pilihanPutar);
+void putarBelKelas(int infoPilihanPutar);
 void cekWaktu(JadwalData masuk, int jamKe);
 void putarBelOtomatis(JsonDocument &json);
 void cekPemutaranManualLebih1x();

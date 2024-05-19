@@ -39,8 +39,8 @@
   "C_Cpp_Runner.linkerArgs": [],
   "C_Cpp_Runner.includePaths": [
     "${workspaceFolder}/**,",
-    "\"C:/Users/HikamSeif/Documents/Arduino/libraries/**\",",
-    "\"C:/Users/HikamSeif/AppData/Local/Arduino15/packages/esp32/hardware/esp32/2.0.16/**\""
+    "C:/Users/HikamSeif/Documents/Arduino/libraries/**,",
+    "C:/Users/HikamSeif/AppData/Local/Arduino15/packages/esp32/hardware/esp32/2.0.16/**"
   ],
   "C_Cpp_Runner.includeSearch": [
     "*",

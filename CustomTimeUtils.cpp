@@ -1,6 +1,5 @@
 #include "CustomTimeUtils.h" // Sertakan file header Variabels.h
 
-// Mendefinisikan fungsi untuk mendapatkan nama hari (Anda mungkin sudah punya fungsi ini di header lain)
 const String getDayName(int dayOfWeek)
 {
   const String dayNames[] = {"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"};
@@ -10,8 +9,6 @@ const String getDayName(int dayOfWeek)
 // Implementasi fungsi untuk mengambil elemen waktu saat ini
 CustomTime getCurrentTime(NTPClient &timeClient)
 {
-  // CustomTime currentTime; // dipindah di variabel global
-
   // Mendapatkan waktu saat ini
   unsigned long epochTime = timeClient.getEpochTime();
   struct tm *timeinfo;

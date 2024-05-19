@@ -26,7 +26,7 @@ void setupDFPlayer()
   Serial.println(F("DFPlayer Mini online."));
 
   myDFPlayer.volume(20);           // Set volume level (0-30)
-  pinMode(DFPLAYERBUSYPIN, INPUT); // Mengatur pin BUSY sebagai input
+  pinMode(DFPLAYER_BUSY_PIN, INPUT); // Mengatur pin BUSY sebagai input
 }
 
 // Bisa atur pake button juga klo mau
@@ -35,7 +35,7 @@ void setupDFPlayer()
 // myDFPlayer.readVolume(); //Read Volume
 // void volumeControl()
 // {
-//   volumeLevel = map(analogRead(DFPLAYERVOLUMEPIN), 0, 4095, 0, 30); // scale the pot value and volume level
+//   volumeLevel = map(analogRead(DFPLAYER_VOLUME_PIN), 0, 4095, 0, 30); // scale the pot value and volume level
 //   myDFPlayer.volume(volumeLevel);
 //   Serial.print("Volume Level : ");
 //   Serial.println(volumeLevel);

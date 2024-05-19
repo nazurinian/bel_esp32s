@@ -8,8 +8,6 @@
 #include "FirebaseInitialSetup.h"
 
 void streamCallback(StreamData data);
-// void streamCallbackPutar(StreamData data);
-// void streamCallbackChoice(StreamData data);
 void streamTimeoutCallback(bool timeout);
 void firebaseSetup();
 

@@ -9,13 +9,13 @@
 #include "FS.h"
 #include "Variables.h"
 
-// #include <AsyncTCP.h>
-// #include <ESPAsyncWebServer.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 
 void spiffConfig();
 void saveCredentials(const String &newSSID, const String &newPassword);
 void wifiSetup();
-// void startConfigServer();
-// void startHotspot();
+void startConfigServer();
+void startHotspot();
 
 #endif

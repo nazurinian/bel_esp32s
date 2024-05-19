@@ -37,17 +37,17 @@ void setup()
   startBluetooth(); // DELAY SETUP 6 (ada delay 1 menit didalemnya)
 
   // IO Setup
-  pinMode(BUTTON1PIN, INPUT_PULLUP);
-  pinMode(BUTTON2PIN, INPUT_PULLUP);
-  pinMode(LEDPIN, OUTPUT);       // Lampu biru bawaan ESP32
-  pinMode(LED1REDPIN, OUTPUT);   // Lampu merah ESP32
-  pinMode(LED2GREENPIN, OUTPUT); // Lampu hijau ESP32
+  pinMode(BUTTON_1_PIN, INPUT_PULLUP);
+  pinMode(BUTTON_2_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);         // Lampu biru bawaan ESP32
+  pinMode(LED_1_RED_PIN, OUTPUT);   // Lampu merah ESP32
+  pinMode(LED_2_GREEN_PIN, OUTPUT); // Lampu hijau ESP32
 }
 
 void loop()
 {
   unsigned long currentMillis = millis();
-  // startHotspot();
+  startHotspot();
   serialBTMonitor();
 
   // Update tiap detik
@@ -59,8 +59,6 @@ void loop()
 
     Serial.println(" ");
     // volumeControl();
-
-    // ----------------------- DILUAR -----------------------
 
     if (WiFi.status() != WL_CONNECTED)
     {
@@ -91,8 +89,6 @@ void loop()
       return;
     }
 
-    // ----------------------- DILUAR -----------------------
-
     if (!Firebase.ready())
     {
       lcdMonitor(0, 3);
@@ -101,17 +97,18 @@ void loop()
     }
 
     cekPemutaranManualLebih1x(); // ERROR MULAI DARI BAWAH SINI
+    
     Serial.print("Info Pilihan Putar: ");
     Serial.println(infoPilihanPutar);
     Serial.print("Info Putar Manual: ");
     Serial.println(infoPlay ? "true" : "false");
-    // Serial.println(cekBelPilihan()); // INI MUNCUL
-    // putarBelManual(cekBelManual(), cekBelPilihan()); // PUTAR MANUAL DARI ONLINE ?? INI STUCK
-    delay(100);                                      // DELAY LOOP 4 ?? Ada kemungkinan karena delay di dalam kode nonblocking ini
+
+    putarBelManual(infoPlay, infoPilihanPutar); // PUTAR MANUAL DARI ONLINE ?? INI STUCK
+    delay(100); // DELAY LOOP 4 ?? Ada kemungkinan karena delay di dalam kode nonblocking ini
 
     if (dataIsAvailable)
     {
-      // putarBelOtomatis(json);
+      putarBelOtomatis(json);
       delay(100); // DELAY LOOP 5
     }
     else
@@ -134,20 +131,31 @@ void loop()
   // Update tiap 10 detik
   if (currentMillis - previousMillisB >= (interval * 10))
   {
-    if(!hariLibur) {
+    if (!hariLibur)
+    {
       previousMillisB = currentMillis;
       displayTime = !displayTime;
       Serial.println(" ");
-
-      // To pause stream
-      // stream.pauseFirebase(true);
-      // stream.clear(); // close session and release memory
       getJsonData();
       delay(100); // DELAY LOOP 7
-      
+    }
+  }
+
+  // Update tiap 10 detik
+  if (currentMillis - previousMillisC >= (interval * 7200)) // 2 Jam sekali clear memori stream
+  {
+    if (!hariLibur)
+    {
+      previousMillisC = currentMillis;
+      // To pause stream
+      stream.pauseFirebase(true);
+      stream.clear(); // close session and release memory
+
+      delay(1000); // DELAY LOOP 7
+
       // To resume stream with callback
-      // stream.pauseFirebase(false);
-      // Firebase.setStreamCallback(stream, streamCallback, streamTimeoutCallback);
+      stream.pauseFirebase(false);
+      Firebase.setStreamCallback(stream, streamCallback, streamTimeoutCallback);
     }
   }
 }
