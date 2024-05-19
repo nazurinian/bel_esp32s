@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Configuration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .submit-button {
+      width: 50%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      align-self: center;
+    }
+    .info-popup {
+      display: none;
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
+  <script>
+    function showInfoPopup(message) {
+      const popup = document.getElementById("info-popup");
+      popup.innerHTML = message;
+      popup.style.display = "block";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <h1>SSID and Password Configuration</h1>
+  <form action='/set-credentials' method='POST' onsubmit="showInfoPopup('SSID dan Password berhasil diubah.');">
+    <label for='ssid'>SSID: </label>
+    <input type='text' id='ssid' name='ssid' required><br>
+    <label for='password'>Password: </label>
+    <input type='password' id='password' name='password' required><br>
+    <input class='submit-button' type='submit' value='Save'>
+  </form>
+  <div id="info-popup" class="info-popup"></div>
+</body>
+</html>
