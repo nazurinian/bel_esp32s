@@ -3,9 +3,9 @@
 
 #include <Arduino.h>
 #include <BluetoothSerial.h>
-#include "../controllers/AudioManager.h"
-#include "../setups/WifiSetup.h"
-#include "../Config.h"
+#include "AudioManager.h"
+#include "WifiSetup.h"
+#include "Config.h"
 
 void startBluetooth();
 void serialBTMonitor();

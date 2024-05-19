@@ -3,7 +3,7 @@
 #define VARIABLES_H
 
 #include <Arduino.h>
-#include "../Libraries.h"
+#include "Libraries.h"
 #include "Structs.h" // Untuk menggunakan struct Waktu
 
 // Deklarasi variabel global

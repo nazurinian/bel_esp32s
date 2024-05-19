@@ -3,9 +3,10 @@
 
 #include <Arduino.h>
 #include <NTPClient.h>
-#include "../models/Structs.h"
-#include "../models/Variables.h"
+#include "Structs.h"
+#include "Variables.h"
 
+// Deklarasi fungsi untuk mengambil elemen waktu saat ini
 CustomTime getCurrentTime(NTPClient &timeClient);
 
 #endif

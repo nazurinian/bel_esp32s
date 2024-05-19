@@ -5,8 +5,8 @@
 #include <ArduinoJson.h>
 #include <DFRobotDFPlayerMini.h>
 #include <FirebaseESP32.h>
-#include "../Config.h"
-#include "../models/Variables.h"
+#include "Config.h"
+#include "Variables.h"
 
 void putarBelKelas(int pilihanPutar);
 void cekWaktu(JadwalData masuk, int jamKe);

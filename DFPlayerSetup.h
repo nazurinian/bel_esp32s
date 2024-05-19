@@ -5,8 +5,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <DFRobotDFPlayerMini.h>
 #include "HardwareSerial.h"
-#include "../Config.h"
-#include "../models/Variables.h"
+#include "Config.h"
+#include "Variables.h"
 
 void setupDFPlayer();
 // void volumeControl();

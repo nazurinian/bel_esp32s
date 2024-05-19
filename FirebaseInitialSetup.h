@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <FirebaseESP32.h>
-#include "../models/Variables.h"
+#include "Variables.h"
 
 void jadwalKelas();
 void settingBelManual();

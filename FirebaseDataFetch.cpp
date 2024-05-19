@@ -5,7 +5,7 @@ void fetchDataFromFirebase(String day)
     HTTPClient http;
 
     // Build Firebase URL
-    String url = String(DATABASE_URL) + "/jadwal" + day + ".json?auth=" + String(DATABASE_SECRET_KEY);
+    String url = String(DATABASE_URL) + "/jadwal/" + day + ".json?auth=" + String(DATABASE_SECRET_KEY);
 
     http.begin(url);
     int httpResponseCode = http.GET();
@@ -42,13 +42,13 @@ void getJsonData()
     if (currentTime.weekday >= 1 && currentTime.weekday <= 4)
     {
         hariLibur = false;
-        fetchDataFromFirebase("/senin-kamis");
+        fetchDataFromFirebase("senin-kamis");
         Serial.println("Memperoleh jadwal Senin-Kamis");
     }
     else if (currentTime.weekday == 5)
     {
         hariLibur = false;
-        fetchDataFromFirebase("/jumat");
+        fetchDataFromFirebase("jumat");
         Serial.println("Memperoleh jadwal Jum'at");
     }
     else

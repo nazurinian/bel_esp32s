@@ -7,7 +7,7 @@
 #include "NTPSetup.h"
 #include "FirebaseSetup.h"
 #include "FS.h"
-#include "../models/Variables.h"
+#include "Variables.h"
 
 // #include <AsyncTCP.h>
 // #include <ESPAsyncWebServer.h>

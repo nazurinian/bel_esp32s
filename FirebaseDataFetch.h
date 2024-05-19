@@ -4,9 +4,9 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include "../Config.h"
-#include "../utils/CustomTimeUtils.h"
-#include "../models/Variables.h" 
+#include "Config.h"
+#include "CustomTimeUtils.h"
+#include "Variables.h" 
 
 void fetchDataFromFirebase(String day);
 void getJsonData();

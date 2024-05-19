@@ -57,7 +57,7 @@ void wifiSetup()
   }
 
   // Menonaktifkan Bluetooth
-  startWifiConfig = false; 
+  startWifiConfig = false;
   lampuStatus = false;
   digitalWrite(LED1REDPIN, LOW);
 
@@ -150,7 +150,7 @@ void wifiSetup()
 //       delay(100);
 //     } else {
 //       Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
-//       WiFi.softAPdisconnect(true);    
+//       WiFi.softAPdisconnect(true);
 //       delay(100);
 //     }
 //   }

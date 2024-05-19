@@ -2,16 +2,16 @@
 #include <Arduino.h>
 #include "Libraries.h"
 #include "Config.h"
-#include "models/Structs.h"
-#include "models/Variables.h"
-#include "controllers/Monitors.h"
-#include "controllers/AudioManager.h"
-#include "controllers/FirebaseDataFetch.h"
-#include "controllers/BluetoothSerialControl.h"
-#include "setups/WifiSetup.h"
-#include "setups/FirebaseSetup.h"
-#include "setups/DFPlayerSetup.h"
-#include "utils/CustomTimeUtils.h"
+#include "Structs.h"
+#include "Variables.h"
+#include "Monitors.h"
+#include "AudioManager.h"
+#include "FirebaseDataFetch.h"
+#include "BluetoothSerialControl.h"
+#include "WifiSetup.h"
+#include "FirebaseSetup.h"
+#include "DFPlayerSetup.h"
+#include "CustomTimeUtils.h"
 
 void setup()
 {

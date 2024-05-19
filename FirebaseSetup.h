@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 #include <FirebaseESP32.h>
-#include "../Config.h"
-#include "../models/Variables.h"
+#include "Config.h"
+#include "Variables.h"
 #include "FirebaseInitialSetup.h"
 
 void streamCallback(StreamData data);
