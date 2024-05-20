@@ -15,46 +15,43 @@ void stopBluetooth() {
   delay(1000);
 }
 
-void serialBTMonitor()
-{
+void serialBTMonitor(long currentMillis) {
   button1State = digitalRead(BUTTON_1_PIN);
 
-  if (!lampuStatus && !startWifiConfig)
-  {
+  if (!lampuStatus && !startWifiConfig) {
     stopBluetooth();
     startWifiConfig = true;
   }
 
-  if (lampuStatus && startWifiConfig)
-  {
+  if (lampuStatus && startWifiConfig) {
     bluetoothOptionMenu();
   }
 
   // Periksa jika tombol ditekan
-  if (button1State == LOW)
-  { //
-    // Tunggu hingga tombol dilepas
-    while (digitalRead(BUTTON_1_PIN) == LOW)
-    {
-      delay(10);
-    }
+  if (button1State == LOW && !button1WasPressed) {
+    button1WasPressed = true;
+    button1LastPressTime = currentMillis; // Catat waktu ketika tombol pertama kali ditekan
+  }
 
-    // Ubah status lampu
-    lampuStatus = !lampuStatus;
+  // Cek apakah tombol telah dilepas atau apakah debounce interval telah berlalu
+  if (button1WasPressed && currentMillis - button1LastPressTime >= debounceInterval) {
+    // Jika tombol dilepas
+    if (digitalRead(BUTTON_1_PIN) == HIGH) {
+      button1WasPressed = false;
 
-    // Update keadaan lampu
-    digitalWrite(LED_1_RED_PIN, lampuStatus ? HIGH : LOW);
+      // Ubah status lampu
+      lampuStatus = !lampuStatus;
 
-    if (lampuStatus)
-    {
-      if (!SerialBT.available())
-      {
-        startBluetooth();
+      // Update keadaan lampu
+      digitalWrite(LED_1_GREEN_PIN, lampuStatus ? HIGH : LOW);
+
+      if (lampuStatus) {
+        if (!SerialBT.available()) {
+          startBluetooth();
+        }
+      } else {
+        stopBluetooth();
       }
-    }
-    else
-    {
-      stopBluetooth();
     }
   }
 }
@@ -199,8 +196,7 @@ void handleBluetoothMenu(int choice)
     if (!digitalRead(DFPLAYER_BUSY_PIN))
     {
       SerialBT.print("Menghentikan pemutaran audio");
-      Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
-      Firebase.setInt(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
+      setDisablePutarManual();
       myDFPlayer.stop();
     }
     else
@@ -214,10 +210,8 @@ void handleBluetoothMenu(int choice)
     // Menonaktifkan Bluetooth
     startWifiConfig = false;
     lampuStatus = false;
-    digitalWrite(LED_1_RED_PIN, LOW);
+    digitalWrite(LED_1_GREEN_PIN, LOW);
     stopBluetooth();
-    // SerialBT.end();
-    // delay(1000);
     break;
 
   case 9:

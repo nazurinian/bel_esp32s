@@ -14,11 +14,7 @@ void setupDFPlayer()
     Serial.println("Unable to begin:");
     Serial.println("1. Please recheck the connection!");
     Serial.println("2. Please insert the SD card!");
-    LCD.clear();
-    LCD.setCursor(0, 0);
-    LCD.print("Cek koneksi!");
-    LCD.setCursor(0, 1);
-    LCD.print("Masukan MicroSD");
+    lcdMonitor(0, 4);
     delay(1000);
   }
 
@@ -33,10 +29,10 @@ void setupDFPlayer()
 // myDFPlayer.volumeUp(); //Volume Up
 // myDFPlayer.volumeDown(); //Volume Down
 // myDFPlayer.readVolume(); //Read Volume
-// void volumeControl()
-// {
-//   volumeLevel = map(analogRead(DFPLAYER_VOLUME_PIN), 0, 4095, 0, 30); // scale the pot value and volume level
-//   myDFPlayer.volume(volumeLevel);
-//   Serial.print("Volume Level : ");
-//   Serial.println(volumeLevel);
-// }
+void volumeControl()
+{
+  volumeLevel = map(analogRead(DFPLAYER_VOLUME_PIN), 0, 4095, 0, 30); // scale the pot value and volume level
+  myDFPlayer.volume(volumeLevel);
+  Serial.print("Volume Level : ");
+  Serial.println(volumeLevel);
+}

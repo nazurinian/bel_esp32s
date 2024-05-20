@@ -10,6 +10,7 @@
 #include "BluetoothSerialControl.h"
 #include "WifiSetup.h"
 #include "FirebaseSetup.h"
+#include "FirebaseInitialSetup.h"
 #include "DFPlayerSetup.h"
 #include "CustomTimeUtils.h"
 
@@ -37,18 +38,22 @@ void setup()
   startBluetooth(); // DELAY SETUP 6 (ada delay 1 menit didalemnya)
 
   // IO Setup
-  pinMode(BUTTON_1_PIN, INPUT_PULLUP);
-  pinMode(BUTTON_2_PIN, INPUT_PULLUP);
-  pinMode(LED_PIN, OUTPUT);         // Lampu biru bawaan ESP32
-  pinMode(LED_1_RED_PIN, OUTPUT);   // Lampu merah ESP32
-  pinMode(LED_2_GREEN_PIN, OUTPUT); // Lampu hijau ESP32
+  pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth 
+  pinMode(BUTTON_2_PIN, INPUT_PULLUP); // WiFi Manager
+  pinMode(LED_PIN, OUTPUT);            // Lampu biru bawaan ESP32
+  pinMode(LED_1_GREEN_PIN, OUTPUT);    // Lampu merah ESP32
+  pinMode(LED_2_RED_PIN, OUTPUT);      // Lampu hijau ESP32
+  pinMode(BUTTON_3_PIN, INPUT_PULLUP); // Tombol Stop Play
+  pinMode(LED_3_COLOR_PIN, OUTPUT);    // Lampu hijau ESP32
 }
 
 void loop()
 {
   unsigned long currentMillis = millis();
+  int sdStatus = myDFPlayer.readState();
   startHotspot();
-  serialBTMonitor();
+  serialBTMonitor(currentMillis);
+  stopAudioPlay(currentMillis);
 
   // Update tiap detik
   if (currentMillis - previousMillisA >= interval)
@@ -56,6 +61,8 @@ void loop()
     previousMillisA = currentMillis;
     timeClient.update();
     currentTime = getCurrentTime(timeClient);
+
+    // digitalWrite(LED_3_COLOR_PIN, sedangMemutarAudio ? HIGH : LOW);
 
     Serial.println(" ");
     // volumeControl();
@@ -96,7 +103,12 @@ void loop()
       return;
     }
 
-    cekPemutaranManualLebih1x(); // ERROR MULAI DARI BAWAH SINI
+    if (sdStatus == 0) {
+      lcdMonitor(0, 4);
+      return;
+    } 
+    
+    cekPemutaranManualLebih1x(currentMillis);
     
     Serial.print("Info Pilihan Putar: ");
     Serial.println(infoPilihanPutar);
@@ -124,8 +136,26 @@ void loop()
       }
     }
 
+    // // biar mudah di true aja di onlinenya biar bagian ini ga nyetop pemutaran, kalau di buat gini bisa juga cuman ntr ga bisa stop lagi, ga bisa stop pake onlen
+    // gini bisa sbenernya, bisa cuman ya ga bisa ngecek yg onlen hhe, kalau paka yg dibawah ini wajib di letakan sebelum yg onlen, klo ga pake if ini taruh setelahnya
+    // if (!sedangMemutarAudio) {
+    //   putarBelManual(infoPlay, infoPilihanPutar); // PUTAR MANUAL DARI ONLINE ?? INI STUCK
+    //   delay(100); // DELAY LOOP 4 ?? Ada kemungkinan karena delay di dalam kode nonblocking ini
+    // }
+    
+    digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW); // Pinjem punya wifi manager dlu
+
     serialMonitor();
     lcdMonitor(1);
+  }
+
+  if (infoPlay)
+  {
+    if (currentMillis - pvMillisObservePlayStatus >= (interval * 300)) // 5 menit cek perubahan pemutar manual di firebase
+    {
+        pvMillisObservePlayStatus = currentMillis;
+        setDisablePutarManual();
+    }
   }
 
   // Update tiap 10 detik
@@ -134,14 +164,19 @@ void loop()
     if (!hariLibur)
     {
       previousMillisB = currentMillis;
-      displayTime = !displayTime;
       Serial.println(" ");
+      if (sdStatus == 0) {
+        clearDisplayOffline = false;
+        lcdMonitor(0, 4);
+        return;
+      } 
+      displayTime = !displayTime;
       getJsonData();
       delay(100); // DELAY LOOP 7
     }
   }
 
-  // Update tiap 10 detik
+  // Clear memori tiap 2 Jam
   if (currentMillis - previousMillisC >= (interval * 7200)) // 2 Jam sekali clear memori stream
   {
     if (!hariLibur)

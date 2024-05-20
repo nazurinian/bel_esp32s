@@ -8,9 +8,9 @@
 #include "Variables.h"
 
 // Fungsi untuk mendapatkan jadwal saat ini
-Schedule getScheduleTitle(const JsonArray &json, NTPClient &timeClient);
+Schedule getScheduleTitle(DynamicJsonDocument &json);
 
 // Fungsi untuk mendapatkan jadwal berikutnya
-Schedule nextTimeSchedule(const JsonArray &json, NTPClient &timeClient);
+Schedule nextTimeSchedule(DynamicJsonDocument &json);
 
 #endif

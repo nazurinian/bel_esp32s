@@ -33,6 +33,7 @@ extern unsigned long previousMillisA;
 extern unsigned long previousMillisB;
 extern unsigned long previousMillisC;
 extern unsigned long previousMillisResetWifi;
+extern unsigned long pvMillisObservePlayStatus;
 extern const long interval;
 
 extern int button1State;
@@ -48,7 +49,6 @@ extern int volumeLevel;
 extern bool sedangMemutarAudio;
 
 extern int playState;
-extern unsigned long loopPlay;
 extern unsigned long previousLoopCheck;
 extern unsigned long intervalCheck;
 
@@ -59,6 +59,15 @@ extern bool lampuStatus;
 extern bool startWifiConfig;
 extern int button2State;
 extern bool hotspotStatus;
+extern int button3State;
+
+extern bool button1WasPressed;
+extern bool button2WasPressed;
+extern bool button3WasPressed;
+extern unsigned long button1LastPressTime;
+extern unsigned long button2LastPressTime;
+extern unsigned long button3LastPressTime;
+extern const long debounceInterval;
 
 // Array untuk menyimpan semua jadwal
 extern Waktu jadwal[];

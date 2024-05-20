@@ -59,7 +59,7 @@ void wifiSetup()
   // Menonaktifkan Bluetooth
   startWifiConfig = false;
   lampuStatus = false;
-  digitalWrite(LED_1_RED_PIN, LOW);
+  digitalWrite(LED_1_GREEN_PIN, LOW);
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
@@ -85,14 +85,6 @@ void wifiSetup()
 void startConfigServer()
 {
   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
-
-  // Mengatur mode AP
-  // Mode simple tanpa password (Hanya SSID)
-  // if (AP_SSID == "")
-  // {
-  //   Serial.println("SSID Kosong, SSID Default: WiFi Manager");
-  //   AP_SSID = "WiFi Manager";
-  // }
 
   if (AP_PASSWORD == "")
   {
@@ -139,29 +131,28 @@ void startConfigServer()
   server.begin();
 }
 
-void startHotspot()
-{
-  button2State = digitalRead(BUTTON_2_PIN);
-  if (button2State == LOW)
-  {
-    while (button2State == LOW)
-    {
-      delay(10);
-    }
+void startHotspot() {
+    // button2State = digitalRead(BUTTON_2_PIN);
 
-    hotspotStatus = !hotspotStatus;
-    digitalWrite(LED_2_GREEN_PIN, hotspotStatus ? HIGH : LOW);
+    // if (button2State == LOW && !button2WasPressed) {
+    //     button2WasPressed = true;
+    //     button2LastPressTime = millis();  // Catat waktu saat tombol pertama kali ditekan
+    // }
 
-    if (hotspotStatus)
-    {
-      startConfigServer();
-      delay(100);
-    }
-    else
-    {
-      Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
-      WiFi.softAPdisconnect(true);
-      delay(100);
-    }
-  }
+    // if (button2WasPressed && (millis() - button2LastPressTime >= debounceInterval)) {
+    //     // Jika tombol dilepas atau debounce interval telah berlalu
+    //     if (digitalRead(BUTTON_2_PIN) == HIGH) {
+    //         button2WasPressed = false;
+
+    //         hotspotStatus = !hotspotStatus;
+    //         digitalWrite(LED_2_RED_PIN, hotspotStatus ? HIGH : LOW);
+
+    //         if (hotspotStatus) {
+    //             startConfigServer();
+    //         } else {
+    //             Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
+    //             WiFi.softAPdisconnect(true);
+    //         }
+    //     }
+    // }
 }

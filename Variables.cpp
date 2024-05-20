@@ -25,6 +25,7 @@ unsigned long previousMillisA = 0;
 unsigned long previousMillisB = 0;
 unsigned long previousMillisC = 0;
 unsigned long previousMillisResetWifi = 0;
+unsigned long pvMillisObservePlayStatus = 0;
 const long interval = 1000;
 
 int button1State = 0;
@@ -40,7 +41,6 @@ int volumeLevel = 0;
 bool sedangMemutarAudio = false;
 
 int playState = 0; // 0: tidak memutar, 1: memutar pertama, 2: memutar kedua
-unsigned long loopPlay = millis();
 unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
 unsigned long intervalCheck = 200;   // Interval untuk memeriksa status DFPlayer
 
@@ -51,6 +51,15 @@ bool lampuStatus = false;
 bool startWifiConfig = false;
 int button2State = 0;
 bool hotspotStatus = false;
+int button3State = 0;
+
+bool button1WasPressed = false;
+bool button2WasPressed = false;
+bool button3WasPressed = false;
+unsigned long button1LastPressTime = 0;
+unsigned long button2LastPressTime = 0;
+unsigned long button3LastPressTime = 0;
+const long debounceInterval = 100;  // interval debounce dalam milidetik
 
 // Array untuk menyimpan semua jadwal
 Waktu jadwal[JUMLAH_JADWAL] = {

@@ -19,37 +19,17 @@ void streamCallback(StreamData data)
     {
         if (data.dataPath() == STATUS_PUTAR) {
             infoPlay = data.boolData(); // data.to<bool>();
-            // Serial.printf("stream path, %s\n\n", data.streamPath().c_str());
-
-            // Serial.print("Path yang diterima: ");
-            // Serial.println(data.streamPath());
-
-            // Serial.print("Nilai infoPlay: ");
-            // Serial.println(infoPlay ? "true" : "false");
         } else if (data.dataPath() == PILIHAN_PUTAR) {
             infoPilihanPutar = data.intData(); // data.to<int>();
-            // Serial.printf("stream path, %s\n\n", data.streamPath().c_str());
-
-            // Serial.print("Path yang diterima: ");
-            // Serial.println(data.streamPath());
-
-            // Serial.print("Nilai PILIHAN_PUTAR: ");
-            // Serial.println(infoPilihanPutar);
         } else { // ini event pathnya "/" ya...
             FirebaseJson json = data.jsonObject();
-            Serial.printf("stream path, %s\n\n", data.streamPath().c_str());
-
             FirebaseJsonData jsonData;
             if (json.get(jsonData, STATUS_PUTAR)) {
                 infoPlay = jsonData.boolValue;
-                // Serial.print("Nilai infoPlay: ");
-                // Serial.println(infoPlay);
             }
             if (json.get(jsonData, PILIHAN_PUTAR))
             {
                 infoPilihanPutar = jsonData.intValue;
-                // Serial.print("Nilai infoPilihanPutar: ");
-                // Serial.println(infoPilihanPutar);
             }
         }
     }
@@ -127,7 +107,6 @@ void firebaseSetup()
 
         if (Firebase.ready() && signupOK)
         {
-            Serial.println("SAMPE FIREBASE AMAN - SETUP AWAL STRUKTUR FIREBASE");
             jadwalKelas();
             settingBelManual();
             delay(100);

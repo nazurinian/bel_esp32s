@@ -7,6 +7,7 @@
 #include "Variables.h"
 
 void jadwalKelas();
+void setDisablePutarManual();
 void settingBelManual();
 
 #endif

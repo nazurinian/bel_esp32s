@@ -4,11 +4,12 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <DFRobotDFPlayerMini.h>
+#include "Monitors.h"
 #include "HardwareSerial.h"
 #include "Config.h"
 #include "Variables.h"
 
 void setupDFPlayer();
-// void volumeControl();
+void volumeControl();
 
 #endif

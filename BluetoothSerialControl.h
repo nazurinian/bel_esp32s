@@ -8,7 +8,7 @@
 #include "Config.h"
 
 void startBluetooth();
-void serialBTMonitor();
+void serialBTMonitor(long currentMillis);
 void resetCredentials();
 void handleBluetoothMenu(int choice);
 void bluetoothOptionMenu();

@@ -2,11 +2,9 @@
 
 void lcdMonitor(int type, int error)
 {
-    // Implementasi fungsi lcdMonitor
-    // 1. LCD Monitor Online
-    // 2. LCD Monitor Offline
-    // 3. Show Schedule
-    // 4. Show NextSchedule
+    // Implementasi fungsi lcdMonitor 1 / aktif
+    // 1. Online Show Schedule
+    // 2. Online Show NextSchedule
 
     if (type == 1)
     {
@@ -74,10 +72,11 @@ void lcdMonitor(int type, int error)
     }
     else
     {
-        // Daftar pilihan waktu offline di LCD
+        // Daftar pilihan waktu offline di lcdMonitor 0 / tidak aktif
         // 1. Masalah belum terhubung wifi
-        // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak lost)
+        // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
+        // 4. Masalah koneksi DFPlayer di awal setup
         if (clearDisplayOffline)
         {
             clearDisplayOffline = false;
@@ -104,6 +103,16 @@ void lcdMonitor(int type, int error)
             LCD.setCursor(0, 1);
             LCD.print("Gagal");
             break;
+        case 4:
+            Serial.println("Mohon cek koneksi audio");
+            Serial.println("Cek kartu SD, pastikan kartu SD sesuai dan tidak rusak");
+            LCD.clear();
+            LCD.setCursor(0, 0);
+            LCD.print("Cek koneksi!");
+            LCD.setCursor(0, 1);
+            LCD.print("Masukan MicroSD");
+            break;
+
         default:
             LCD.setCursor(0, 0);
             LCD.print("Something");

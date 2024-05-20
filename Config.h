@@ -2,13 +2,15 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define BUTTON_1_PIN 14    // Tombol 1 (Pin 14)
-#define BUTTON_2_PIN 27    // Tombol 2 (Pin 27)
-#define LED_PIN 2     // Lampu LED (Pin 2, default untuk ESP32)
-#define LED_1_RED_PIN 12    // LED Merah 1 (Pin 12)
-#define LED_2_GREEN_PIN 13    // LED Hijau 2 (Pin 13)
-#define DFPLAYER_VOLUME_PIN 32   // Pin untuk mengendalikan volume DFPlayer (Pin 32)
-#define DFPLAYER_BUSY_PIN 23     // Pin untuk mendeteksi keadaan sibuk DFPlayer (Pin 23)
+#define BUTTON_1_PIN 14        // Tombol 1 (Pin 14) (Bluetooth)
+#define BUTTON_2_PIN 27        // Tombol 2 (Pin 27) (WiFi Manager)
+#define BUTTON_3_PIN 26        // Tombol 3 (Pin 26) (Stop Audio)
+#define LED_PIN 2              // Lampu LED (Pin 2, default untuk ESP32)
+#define LED_1_GREEN_PIN 12     // LED Hijau 1 (Pin 12)
+#define LED_2_RED_PIN 13       // LED Merah 2 (Pin 13)
+#define LED_3_COLOR_PIN 25       // LED Almuhim 3 (Pin 25) Untuk status putar
+#define DFPLAYER_VOLUME_PIN 32 // Pin untuk mengendalikan volume DFPlayer (Pin 32)
+#define DFPLAYER_BUSY_PIN 23   // Pin untuk mendeteksi keadaan sibuk DFPlayer (Pin 23)
 
 #define API_KEY "AIzaSyBj8BvP9fbpHe82STphSUZqF1ZY1TirRXY" 
 #define DATABASE_URL "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app"

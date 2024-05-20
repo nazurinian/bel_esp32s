@@ -25,6 +25,8 @@ void fetchDataFromFirebase(String day)
         else
         {
             dataIsAvailable = true;
+            jadwalSaatIni = getScheduleTitle(json);
+            jadwalSelanjutnya = nextTimeSchedule(json);
         }
     }
     else
@@ -48,7 +50,7 @@ void getJsonData()
     else if (currentTime.weekday == 5)
     {
         hariLibur = false;
-        fetchDataFromFirebase("JUMAT");
+        fetchDataFromFirebase("jumat");
         Serial.println("Memperoleh jadwal Jum'at");
     }
     else

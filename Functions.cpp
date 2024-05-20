@@ -1,6 +1,6 @@
 #include "Functions.h"
 
-Schedule getScheduleTitle(const JsonArray &json, NTPClient &timeClient)
+Schedule getScheduleTitle(DynamicJsonDocument &json)
 {
   int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
   Schedule currentSchedule;
@@ -44,7 +44,7 @@ Schedule getScheduleTitle(const JsonArray &json, NTPClient &timeClient)
   return currentSchedule;
 }
 
-Schedule nextTimeSchedule(const JsonArray &json, NTPClient &timeClient)
+Schedule nextTimeSchedule(DynamicJsonDocument &json)
 {
   int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
   Schedule nextSchedule;
