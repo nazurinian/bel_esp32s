@@ -47,7 +47,7 @@ unsigned long intervalCheck = 200;   // Interval untuk memeriksa status DFPlayer
 String newSSIDBT = "";
 String newPasswordBT = "";
 
-bool lampuStatus = false;
+bool btStatus = false;
 bool startWifiConfig = false;
 int button2State = 0;
 bool hotspotStatus = false;
@@ -59,7 +59,7 @@ bool button3WasPressed = false;
 unsigned long button1LastPressTime = 0;
 unsigned long button2LastPressTime = 0;
 unsigned long button3LastPressTime = 0;
-const long debounceInterval = 100;  // interval debounce dalam milidetik
+const long debounceInterval = 10;  // interval debounce dalam milidetik
 
 // Array untuk menyimpan semua jadwal
 Waktu jadwal[JUMLAH_JADWAL] = {

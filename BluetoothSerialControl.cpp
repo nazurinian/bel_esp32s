@@ -30,7 +30,7 @@ void stopBluetooth() {
 // void setupBluetooth() {
 //   // Menonaktifkan Bluetooth
 //   startWifiConfig = false;
-//   lampuStatus = false;
+//   btStatus = false;
 //   digitalWrite(LED_1_GREEN_PIN, LOW);
 
 //   startBluetooth();
@@ -38,7 +38,7 @@ void stopBluetooth() {
   
 //   // if (!SerialBT.begin("BSIB-BT")) { // Nama perangkat Bluetooth
 //   //   Serial.println("\nBluetooth Serial gagal diaktifkan");
-//   //   lampuStatus == false;
+//   //   btStatus == false;
 //   // } else {
 //   //   Serial.println("\nBluetooth Serial sedang diaktifkan...");
 //   //   // Tunggu hingga Bluetooth benar-benar aktif
@@ -75,12 +75,12 @@ void stopBluetooth() {
 void serialBTMonitor(long currentMillis) {
   // button1State = digitalRead(BUTTON_1_PIN);
 
-  // if (!lampuStatus && !startWifiConfig) {
+  // if (!btStatus && !startWifiConfig) {
   //   // stopBluetooth();
   //   startWifiConfig = true;
   // }
 
-  // if (lampuStatus && startWifiConfig) {
+  // if (btStatus && startWifiConfig) {
   //   bluetoothOptionMenu();
   // }
 
@@ -97,12 +97,12 @@ void serialBTMonitor(long currentMillis) {
   //     button1WasPressed = false;
 
   //     // Ubah status lampu
-  //     lampuStatus = !lampuStatus;
+  //     btStatus = !btStatus;
 
   //     // Update keadaan lampu
-  //     digitalWrite(LED_1_GREEN_PIN, lampuStatus ? HIGH : LOW);
+  //     digitalWrite(LED_1_GREEN_PIN, btStatus ? HIGH : LOW);
 
-  //     if (lampuStatus) {
+  //     if (btStatus) {
   //       if (!SerialBT.available()) {
   //         // To pause stream
   //         stream.pauseFirebase(true);
@@ -274,7 +274,7 @@ void handleBluetoothMenu(int choice)
   // case 8:
   //   // Menonaktifkan Bluetooth
   //   startWifiConfig = false;
-  //   lampuStatus = false;
+  //   btStatus = false;
   //   digitalWrite(LED_1_GREEN_PIN, LOW);
   //   stopBluetooth();
   //   break;

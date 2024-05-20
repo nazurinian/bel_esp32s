@@ -55,7 +55,7 @@ extern unsigned long intervalCheck;
 extern String newSSIDBT;
 extern String newPasswordBT;
 
-extern bool lampuStatus;
+extern bool btStatus;
 extern bool startWifiConfig;
 extern int button2State;
 extern bool hotspotStatus;

@@ -2,6 +2,7 @@
 #define WIFI_SETUP_H
 
 #include <Arduino.h>
+#include <FirebaseESP32.h>
 #include <SPIFFS.h>
 #include <WiFi.h>
 #include "NTPSetup.h"
@@ -18,6 +19,6 @@ void saveCredentials(const String &newSSID, const String &newPassword);
 void wifiSetup();
 void putarBelKelasWiFi(int pilihan);
 void startConfigServer();
-void startHotspot();
+void startHotspot(long currentMillis);
 
 #endif

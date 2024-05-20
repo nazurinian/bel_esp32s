@@ -62,19 +62,29 @@ void wifiSetup()
   }
 
   // Menonaktifkan Bluetooth
-  startWifiConfig = false;
-  lampuStatus = false;
+  // btStatus = false;
+  // startWifiConfig = false;
   digitalWrite(LED_1_GREEN_PIN, LOW);
-  delay(500);
+  delay(100);
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.println("\nGagal terhubung ke WiFi menggunakan SSID dan password default.");
-    // Hapus aja
-    // startConfigServer();
-    // digitalWrite(LED_2_RED_PIN, LOW);
-    // hotspotStatus = true;
+
+    if (hotspotStatus || startWifiConfig)
+    {
+      return;
+    }
+
+    if (!startWifiConfig)
+    {
+      startConfigServer();
+      startWifiConfig = true;
+      hotspotStatus = true;
+      digitalWrite(LED_1_GREEN_PIN, HIGH);
+    }
+
     delay(100);
     return;
   }
@@ -89,6 +99,7 @@ void wifiSetup()
       Serial.println("Ping successful");
       Serial.println("Sistem telah tersambung ke internet");
       internetAvailable = true;
+      startWifiConfig = false;
       ntpSetup();
       delay(100);
       firebaseSetup();
@@ -96,7 +107,6 @@ void wifiSetup()
       Serial.println("Ping failed");
       Serial.println("Sistem tidak terhubung internet saat ini");
       internetAvailable = false;
-      return;
     }
   }
 
@@ -159,8 +169,18 @@ void putarBelKelasWiFi(int pilihan) {
 }
 
 void startConfigServer() {
+  // Pengaturan jaringan untuk hotspot
+  IPAddress local_IP(10, 0, 0, 1);        // Alamat IP yang ingin kamu tetapkan untuk hotspot
+  IPAddress gateway(10, 0, 0, 1);         // Alamat IP gateway (biasanya sama dengan alamat IP hotspot)
+  IPAddress subnet(255, 255, 255, 0);     // Subnet mask
+
   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
 
+  // Mengonfigurasi IP statis untuk hotspot
+  if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
+    Serial.println("Gagal mengonfigurasi IP statis untuk hotspot");
+  }
+  
   if (AP_PASSWORD == "")
   {
     WiFi.softAP(AP_SSID);
@@ -202,8 +222,7 @@ void startConfigServer() {
 
   server.on("/cek-ssid", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan pengecekan SSID
-    // Misalnya: String currentSSID = WiFi.SSID();
-    String currentSSID = "Your_SSID_Here";  // Ganti dengan implementasi sebenarnya
+    String currentSSID = readSSID().c_str();  // Ganti dengan implementasi sebenarnya
     request->send(200, "text/plain", "SSID saat ini: \n" + currentSSID);
   });
 
@@ -223,7 +242,31 @@ void startConfigServer() {
     if (request->hasArg("bell")) {
       int bellChoice = request->arg("bell").toInt();
       putarBelKelasWiFi(bellChoice);
-      request->send(200, "text/plain", "Bel diputar.");
+
+      // Putar bel manual
+      String message;
+      if (!signupOK)
+      {
+        message = "Belum terhubung dengan server";
+        request->send(200, "text/plain", message);
+        return;
+      }
+
+      if (!Firebase.ready())
+      {
+        message = fbdo.errorReason();
+        request->send(200, "text/plain", message);
+        return;
+      }
+
+      FirebaseJson jsonUp;
+      jsonUp.add("putar",  true);
+      jsonUp.add("choice", bellChoice);
+      Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+
+      putarBelManual(true, bellChoice); 
+      request->send(200, "text/plain", "Memutar Bel pilihan ke-" + String(bellChoice));
+      delay(100);
     } else {
       request->send(400, "text/plain", "Gagal memutar bel");
     }
@@ -231,28 +274,59 @@ void startConfigServer() {
 
   server.on("/hentikan-bel", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan penghentian bel
-    Serial.println("Bel dihentikan.");
-    request->send(200, "text/plain", "Bel dihentikan.");
+    String message;
+    if (!signupOK)
+    {
+      message = "Belum terhubung dengan server";
+      request->send(200, "text/plain", message);
+      return;
+    }
+
+    if (!Firebase.ready())
+    {
+      message = fbdo.errorReason();
+      request->send(200, "text/plain", message);
+      return;
+    }
+
+    if (!digitalRead(DFPLAYER_BUSY_PIN))
+    {
+      message = "Pemutaran bel dihentikan";
+      Serial.println(message);
+      setDisablePutarManual();
+      myDFPlayer.stop();
+    }
+    else
+    {
+      message = "Tidak sedang memutar audio";
+      Serial.println(message);
+    }
+    
+    request->send(200, "text/plain", message);
   });
 
   // ------------------------------- Ga Jadi Pakek Bluetooth ------------------------------- 
   server.on("/nonaktifkan-bluetooth", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan nonaktifkan bluetooth
-    Serial.println("Bluetooth dinonaktifkan.");
     request->send(200, "text/plain", "Fitur ini belum tersedia"); // Bluetooth dinonaktifkan.
   });
-  // ------------------------------- Ga Jadi Pakek Bluetooth ------------------------------- 
-
+  // ----------------------------- Ga Jadi Pakek Restart Wifi ------------------------------ 
+ 
   server.on("/restart-wifi", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan restart WiFi
-    Serial.println("WiFi di-restart.");
-    request->send(200, "text/plain", "WiFi di-restart.");
+    SerialBT.println("\nMencoba menghubungkan perangkat dengan WiFi yang terdaftar ...");
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      internetAvailable = true;
+      WiFi.disconnect(true);
+    }
+    request->send(200, "text/plain", "Merestart WiFi sistem");
   });
 
   server.on("/restart-perangkat", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan restart perangkat
-    request->send(200, "text/plain", "Perangkat di-restart.");
-    delay(1000);
+    request->send(200, "text/plain", "Perangkat di-restart");
+    delay(100);
     ESP.restart();
   });
 
@@ -260,15 +334,15 @@ void startConfigServer() {
   server.begin();
 }
 
-void startHotspot() {
+void startHotspot(long currentMillis) {
     button2State = digitalRead(BUTTON_1_PIN);
 
     if (button2State == LOW && !button2WasPressed) {
         button2WasPressed = true;
-        button2LastPressTime = millis();  // Catat waktu saat tombol pertama kali ditekan
+        button2LastPressTime = currentMillis;  // Catat waktu saat tombol pertama kali ditekan
     }
 
-    if (button2WasPressed && (millis() - button2LastPressTime >= debounceInterval)) {
+    if (button2WasPressed && (currentMillis - button2LastPressTime >= debounceInterval)) {
         // Jika tombol dilepas atau debounce interval telah berlalu
         if (digitalRead(BUTTON_1_PIN) == HIGH) {
             button2WasPressed = false;

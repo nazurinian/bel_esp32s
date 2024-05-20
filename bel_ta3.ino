@@ -36,8 +36,8 @@ void setup()
 
   // Bluetooth Setup
   // setupBluetooth(); // DELAY SETUP 6 (ada delay 1 menit didalemnya)
-  startBluetooth();
-  stopBluetooth();
+  // startBluetooth();
+  // stopBluetooth();
 
   // IO Setup
   pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth 
@@ -53,8 +53,8 @@ void loop()
 {
   unsigned long currentMillis = millis();
   int sdStatus = myDFPlayer.readState();
-  startHotspot();
-  serialBTMonitor(currentMillis);
+  startHotspot(currentMillis);
+  // serialBTMonitor(currentMillis);
   stopAudioPlay(currentMillis);
 
   // Update tiap detik
@@ -67,15 +67,16 @@ void loop()
     Serial.println(" ");
     // volumeControl();
 
-    if (WiFi.status() != WL_CONNECTED)
+    // if (WiFi.status() != WL_CONNECTED)
+    if (!internetAvailable)
     {
       lcdMonitor(0, 1);
-      if (currentMillis - previousMillisResetWifi >= (interval * 10))
-      {
-        previousMillisResetWifi = currentMillis;
-        Serial.println("Anda belum terhubung ke WiFi.");
-        wifiSetup();
-      }
+      // if (currentMillis - previousMillisResetWifi >= (interval * 10))
+      // {
+      //   previousMillisResetWifi = currentMillis;
+      //   Serial.println("Anda belum terhubung ke WiFi.");
+      wifiSetup();
+      // }
       return;
     }
 

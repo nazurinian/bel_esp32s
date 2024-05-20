@@ -58,16 +58,15 @@ void cekWaktu(JadwalData masuk, int jamKe)
     {
         if (jamKe == 1)
         {
-            Serial.print("Memutar Sound 5 menit sebelum Literasi Pagi" + String(jamKe));
-            Serial.println(jamKe);
+            Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
+            Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
             return;
         }
         if (jamKe == 2 || jamKe == 7 || jamKe == 14)
         {
-            Serial.print("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
-            Serial.println(jamKe);
-            Serial.print("Jadwal : " + String(masuk.jam) + "." + String(masuk.menit));
+            Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
+            Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
             return;
         }
@@ -77,23 +76,22 @@ void cekWaktu(JadwalData masuk, int jamKe)
     {
         if (jamKe == 1)
         {
-            Serial.print("Memutar Bel Pulang");
+            Serial.println("Memutar Bel Pulang");
             putarBelKelas(1);
         }
         else if (jamKe == 6 || jamKe == 13)
         { // Waktu Mulai Istirahat (Bel putar 2x panjang)
-            Serial.print("Memutar Bel Istirahat");
+            Serial.println("Memutar Bel Istirahat");
             putarBelKelas(5);
         }
         else if (jamKe == 16)
         { // Waktu Mulai Istirahat (Bel putar 3x panjang)
-            Serial.print("Memutar Bel Pulang");
+            Serial.println("Memutar Bel Pulang");
             putarBelKelas(6);
         }
         else
         {
-            Serial.print("Memutar Bel Masuk Jam ke-");
-            Serial.println(jamKe);
+            Serial.println("Memutar Bel Masuk Jam ke-" + String(jamKe));
             if (jamKe == 2 || jamKe == 7 || jamKe == 14)
             {
                 putarBelKelas(2);
@@ -103,7 +101,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
                 putarBelKelas(3);
             }
         }
-        Serial.print("Jadwal : " + String(masuk.jam) + "." + String(masuk.menit));
+        Serial.println("Jadwal : " + String(masuk.jam) + "." + String(masuk.menit));
     }
 }
 
