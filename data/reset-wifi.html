@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pengaturan Bel Sekolah</title>
+  <title>Reset WiFi Configuration</title>
   <style>
     body {
       display: flex;
@@ -24,24 +24,34 @@
     h1 {
       color: #333;
     }
-    .button-container {
+    form {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
     }
-    .control-button {
-      padding: 10px;
-      margin: 5px 0;
+    label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
       width: 100%;
-      max-width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .submit-button {
+      width: 50%;
+      padding: 10px;
       background-color: #4CAF50;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-    .control-button:hover {
+    .submit-button:hover {
       background-color: #45a049;
     }
     .popup {
@@ -83,29 +93,6 @@
       background-color: #45a049;
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Pengaturan Bel Sekolah</h1>
-    <div class="button-container">
-      <button class="control-button" onclick="window.location.href='/reset-wifi'">Reset SSID dan Password WiFi</button>
-      <button class="control-button" onclick="showResult('cek-ssid')">Cek SSID WiFi</button>
-      <button class="control-button" onclick="showResult('cek-ip')">Cek IP Address</button>
-      <button class="control-button" onclick="window.location.href='/putar-bel'">Putar Bel Manual</button>
-      <button class="control-button" onclick="showResult('hentikan-bel')">Hentikan Pemutaran Bel</button>
-      <button class="control-button" onclick="showResult('nonaktifkan-bluetooth')">Nonaktifkan Bluetooth</button>
-      <button class="control-button" onclick="showResult('restart-wifi')">Restart WiFi</button>
-      <button class="control-button" onclick="showResult('restart-perangkat')">Restart Perangkat</button>
-    </div>
-  </div>
-
-  <div class="overlay" onclick="hidePopup()"></div>
-  <div class="popup" id="popup">
-    <h1>Informasi</h1>
-    <p id="popup-content"></p>
-    <button class="btn" onclick="hidePopup()">OK</button>
-  </div>
-
   <script>
     function showPopup(content) {
       const popup = document.getElementById("popup");
@@ -121,16 +108,46 @@
       document.querySelector(".overlay").style.display = "none";
     }
 
-    function showResult(command) {
-      fetch('/' + command)
-        .then(response => response.text())
-        .then(data => {
-          showPopup(data);
-        })
-        .catch(error => {
-          showPopup("Gagal menjalankan perintah");
-        });
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const form = document.getElementById('reset-form');
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: form.method,
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        showPopup('SSID dan Password berhasil diubah.');
+        setTimeout(() => {
+          hidePopup();
+          window.location.href = '/'; // Redirect to main page
+        }, 2000);
+      })
+      .catch(error => {
+        showPopup('Gagal mengubah SSID dan Password.');
+      });
     }
   </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Reset WiFi Configuration</h1>
+    <form id="reset-form" action='/set-credentials' method='POST' onsubmit="handleFormSubmit(event)">
+      <label for='ssid'>SSID: </label>
+      <input type='text' id='ssid' name='ssid' required><br>
+      <label for='password'>Password: </label>
+      <input type='password' id='password' name='password' required><br>
+      <input class='submit-button' type='submit' value='Save'>
+    </form>
+  </div>
+
+  <div class="overlay" onclick="hidePopup()"></div>
+  <div class="popup" id="popup">
+    <h1>Informasi</h1>
+    <p id="popup-content"></p>
+    <button class="btn" onclick="hidePopup()">OK</button>
+  </div>
 </body>
 </html>

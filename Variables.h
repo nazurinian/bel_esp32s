@@ -10,7 +10,7 @@
 #include "Structs.h"
 
 extern LiquidCrystal_I2C LCD;
-extern BluetoothSerial SerialBT;
+// extern BluetoothSerial SerialBT;
 
 extern WiFiUDP ntpUDP;
 extern NTPClient timeClient;
@@ -86,5 +86,6 @@ extern String timeOrBel;
 
 extern int infoPilihanPutar;
 extern bool infoPlay;
+extern bool internetAvailable;
 
 #endif

@@ -77,6 +77,14 @@ void lcdMonitor(int type, int error)
         // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
         // 4. Masalah koneksi DFPlayer di awal setup
+        if (displayTime) {
+            displayNextSchedule = true;
+            displaySchedule = false;
+        } else {
+            displaySchedule = true;
+            displayNextSchedule = false;
+        }
+
         if (clearDisplayOffline)
         {
             clearDisplayOffline = false;
@@ -106,7 +114,6 @@ void lcdMonitor(int type, int error)
         case 4:
             Serial.println("Mohon cek koneksi audio");
             Serial.println("Cek kartu SD, pastikan kartu SD sesuai dan tidak rusak");
-            LCD.clear();
             LCD.setCursor(0, 0);
             LCD.print("Cek koneksi!");
             LCD.setCursor(0, 1);

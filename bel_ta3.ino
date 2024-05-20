@@ -35,7 +35,9 @@ void setup()
   delay(100); // DELAY SETUP 5
 
   // Bluetooth Setup
-  startBluetooth(); // DELAY SETUP 6 (ada delay 1 menit didalemnya)
+  // setupBluetooth(); // DELAY SETUP 6 (ada delay 1 menit didalemnya)
+  startBluetooth();
+  stopBluetooth();
 
   // IO Setup
   pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth 
@@ -62,8 +64,6 @@ void loop()
     timeClient.update();
     currentTime = getCurrentTime(timeClient);
 
-    // digitalWrite(LED_3_COLOR_PIN, sedangMemutarAudio ? HIGH : LOW);
-
     Serial.println(" ");
     // volumeControl();
 
@@ -79,7 +79,7 @@ void loop()
       return;
     }
 
-    if (!signupOK)
+    if (!signupOK && internetAvailable)
     {
       ntpSetup();
       delay(100); // DELAY LOOP 1
@@ -100,6 +100,15 @@ void loop()
     {
       lcdMonitor(0, 3);
       Serial.println(fbdo.errorReason());
+      return;
+    }
+
+    // After calling stream.keepAlive, now we can track the server connecting status
+    if (!stream.httpConnected())
+    {
+      // Server was disconnected!
+      lcdMonitor(0, 3);
+      Serial.println("Gagal melakukan streaming data pemutaran di server");
       return;
     }
 
@@ -142,7 +151,8 @@ void loop()
     //   putarBelManual(infoPlay, infoPilihanPutar); // PUTAR MANUAL DARI ONLINE ?? INI STUCK
     //   delay(100); // DELAY LOOP 4 ?? Ada kemungkinan karena delay di dalam kode nonblocking ini
     // }
-    
+
+    // digitalWrite(LED_3_COLOR_PIN, sedangMemutarAudio ? HIGH : LOW);
     digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW); // Pinjem punya wifi manager dlu
 
     serialMonitor();

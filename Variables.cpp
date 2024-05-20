@@ -2,7 +2,7 @@
 #include "Variables.h"
 
 LiquidCrystal_I2C LCD(0x27, 16, 2);
-BluetoothSerial SerialBT;
+// BluetoothSerial SerialBT;
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", GMT_OFFSET_SEC);
@@ -14,7 +14,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 DynamicJsonDocument json(10240);
 
-AsyncWebServer server(81);
+AsyncWebServer server(80);
 DFRobotDFPlayerMini myDFPlayer;
 
 bool signupOK = false;
@@ -147,5 +147,6 @@ Schedule jadwalSelanjutnya;
 String nowOrNext;
 String timeOrBel;
 
-bool infoPlay;
 int infoPilihanPutar;
+bool infoPlay;
+bool internetAvailable = true;

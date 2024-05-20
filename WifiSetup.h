@@ -10,11 +10,13 @@
 #include "Variables.h"
 
 #include <AsyncTCP.h>
+#include <ESP32Ping.h>
 #include <ESPAsyncWebServer.h>
 
 void spiffConfig();
 void saveCredentials(const String &newSSID, const String &newPassword);
 void wifiSetup();
+void putarBelKelasWiFi(int pilihan);
 void startConfigServer();
 void startHotspot();
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pengaturan Bel Sekolah</title>
+  <title>Pilih Bel</title>
   <style>
     body {
       display: flex;
@@ -24,24 +24,31 @@
     h1 {
       color: #333;
     }
-    .button-container {
+    form {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
     }
-    .control-button {
-      padding: 10px;
-      margin: 5px 0;
+    label {
+      display: block;
+      margin-bottom: 10px;
+      text-align: left;
       width: 100%;
-      max-width: 300px;
+    }
+    input[type="radio"] {
+      margin: 10px;
+    }
+    .submit-button {
+      width: 50%;
+      padding: 10px;
       background-color: #4CAF50;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 20px;
     }
-    .control-button:hover {
+    .submit-button:hover {
       background-color: #45a049;
     }
     .popup {
@@ -83,29 +90,6 @@
       background-color: #45a049;
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Pengaturan Bel Sekolah</h1>
-    <div class="button-container">
-      <button class="control-button" onclick="window.location.href='/reset-wifi'">Reset SSID dan Password WiFi</button>
-      <button class="control-button" onclick="showResult('cek-ssid')">Cek SSID WiFi</button>
-      <button class="control-button" onclick="showResult('cek-ip')">Cek IP Address</button>
-      <button class="control-button" onclick="window.location.href='/putar-bel'">Putar Bel Manual</button>
-      <button class="control-button" onclick="showResult('hentikan-bel')">Hentikan Pemutaran Bel</button>
-      <button class="control-button" onclick="showResult('nonaktifkan-bluetooth')">Nonaktifkan Bluetooth</button>
-      <button class="control-button" onclick="showResult('restart-wifi')">Restart WiFi</button>
-      <button class="control-button" onclick="showResult('restart-perangkat')">Restart Perangkat</button>
-    </div>
-  </div>
-
-  <div class="overlay" onclick="hidePopup()"></div>
-  <div class="popup" id="popup">
-    <h1>Informasi</h1>
-    <p id="popup-content"></p>
-    <button class="btn" onclick="hidePopup()">OK</button>
-  </div>
-
   <script>
     function showPopup(content) {
       const popup = document.getElementById("popup");
@@ -121,16 +105,51 @@
       document.querySelector(".overlay").style.display = "none";
     }
 
-    function showResult(command) {
-      fetch('/' + command)
-        .then(response => response.text())
-        .then(data => {
-          showPopup(data);
+    function submitForm() {
+      const form = document.getElementById("bel-form");
+      const formData = new FormData(form);
+      const belChoice = formData.get("bel");
+      if (belChoice) {
+        fetch("/selected-bell", {
+          method: "POST",
+          body: new URLSearchParams({ "bell": belChoice }),
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        })
+        .then(response => {
+          if (response.ok) {
+            showPopup("Bel diputar.");
+          } else {
+            showPopup("Gagal memutar bel.");
+          }
         })
         .catch(error => {
-          showPopup("Gagal menjalankan perintah");
+          showPopup("Terjadi kesalahan: " + error.message);
         });
+      } else {
+        showPopup("Pilih salah satu bel terlebih dahulu.");
+      }
     }
   </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Pilih Bel</h1>
+    <form id="bel-form">
+      <label><input type="radio" name="bel" value="1"> Bel Literasi Pagi</label>
+      <label><input type="radio" name="bel" value="2"> Bel Awal Masuk Pelajaran</label>
+      <label><input type="radio" name="bel" value="3"> Bel Pertengahan Pelajaran</label>
+      <label><input type="radio" name="bel" value="4"> Audio 5 Menit Sebelum Bel</label>
+      <label><input type="radio" name="bel" value="5"> Bel Istirahat</label>
+      <label><input type="radio" name="bel" value="6"> Bel Pulang</label><br>
+      <button class="submit-button" type="button" onclick="submitForm()">Putar Bel</button>
+    </form>
+  </div>
+
+  <div class="overlay" onclick="hidePopup()"></div>
+  <div class="popup" id="popup">
+    <h1>Informasi</h1>
+    <p id="popup-content"></p>
+    <button class="btn" onclick="hidePopup()">OK</button>
+  </div>
 </body>
 </html>
