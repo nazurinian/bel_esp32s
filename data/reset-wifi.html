@@ -35,12 +35,23 @@
       text-align: left;
       width: 100%;
     }
-    input {
+    input[type="text"], input[type="password"] {
       width: 100%;
       padding: 10px;
       margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      margin-bottom: 20px; /* Adjusted margin to increase spacing */
+    }
+    .checkbox-group label {
+      margin: 0;
+      margin-left: 5px;
     }
     .submit-button {
       width: 50%;
@@ -85,9 +96,6 @@
       color: white;
       border-radius: 5px;
       cursor: pointer;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
     }
     .popup button:hover {
       background-color: #45a049;
@@ -122,23 +130,56 @@
         showPopup('SSID dan Password berhasil diubah.');
         setTimeout(() => {
           hidePopup();
-          window.location.href = '/'; // Redirect to main page
+          window.location.href = '/';
         }, 2000);
       })
       .catch(error => {
         showPopup('Gagal mengubah SSID dan Password.');
       });
     }
+
+    function togglePasswordVisibility() {
+      var passwordInput = document.getElementById('password');
+      var showPasswordCheckbox = document.getElementById('show-password');
+      if (showPasswordCheckbox.checked) {
+        passwordInput.type = 'text';
+      } else {
+        passwordInput.type = 'password';
+      }
+    }
+
+    function validatePassword(event) {
+      var passwordInput = document.getElementById('password');
+      if (passwordInput.value.length < 8) {
+        alert('Password minimal harus terdiri dari 8 karakter.');
+        event.preventDefault(); // Mencegah pengiriman form jika validasi gagal
+        return false;
+      }
+      return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('show-password').addEventListener('change', togglePasswordVisibility);
+      document.getElementById('reset-form').addEventListener('submit', (event) => {
+        if (validatePassword(event)) {
+          handleFormSubmit(event);
+        }
+      });
+    });
   </script>
 </head>
 <body>
   <div class="container">
     <h1>Reset WiFi Configuration</h1>
-    <form id="reset-form" action='/set-credentials' method='POST' onsubmit="handleFormSubmit(event)">
+    <form id="reset-form" action='/set-credentials' method='POST'>
       <label for='ssid'>SSID: </label>
       <input type='text' id='ssid' name='ssid' required><br>
       <label for='password'>Password: </label>
       <input type='password' id='password' name='password' required><br>
+      <div class="checkbox-group">
+        <input type='checkbox' id='show-password' onchange="togglePasswordVisibility()">
+        <label for='show-password'>Show Password</label>
+      </div>
       <input class='submit-button' type='submit' value='Save'>
     </form>
   </div>

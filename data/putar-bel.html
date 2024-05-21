@@ -117,10 +117,13 @@
         })
         .then(response => {
           if (response.ok) {
-            showPopup("Bel diputar.");
+            return response.text();
           } else {
             showPopup("Gagal memutar bel.");
           }
+        })
+        .then(data => {
+          showPopup(data);
         })
         .catch(error => {
           showPopup("Terjadi kesalahan: " + error.message);

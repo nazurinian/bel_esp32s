@@ -49,9 +49,10 @@ void wifiSetup()
   // Coba koneksi ke WiFi dengan SSID dan password default
   WiFi.begin(readSSID().c_str(), readPassword().c_str());
   int attempt = 0;
-  while (WiFi.status() != WL_CONNECTED && attempt < 20 && internetAvailable)
+  // while (WiFi.status() != WL_CONNECTED && attempt < 10 && internetAvailable)
+  while (WiFi.status() != WL_CONNECTED && attempt < 10)
   {
-    if (attempt == 19)
+    if (attempt == 9)
     {
       internetAvailable = false;
     }
@@ -64,8 +65,6 @@ void wifiSetup()
   // Menonaktifkan Bluetooth
   // btStatus = false;
   // startWifiConfig = false;
-  digitalWrite(LED_1_GREEN_PIN, LOW);
-  delay(100);
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
@@ -94,6 +93,9 @@ void wifiSetup()
     Serial.println("WiFi connected");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+
+    digitalWrite(LED_1_GREEN_PIN, LOW);
+    delay(100);
 
     if (Ping.ping("www.google.com")) {
       Serial.println("Ping successful");
@@ -304,21 +306,16 @@ void startConfigServer() {
     
     request->send(200, "text/plain", message);
   });
-
-  // ------------------------------- Ga Jadi Pakek Bluetooth ------------------------------- 
-  server.on("/nonaktifkan-bluetooth", HTTP_GET, [](AsyncWebServerRequest *request){
-    // Implementasikan nonaktifkan bluetooth
-    request->send(200, "text/plain", "Fitur ini belum tersedia"); // Bluetooth dinonaktifkan.
-  });
-  // ----------------------------- Ga Jadi Pakek Restart Wifi ------------------------------ 
  
   server.on("/restart-wifi", HTTP_GET, [](AsyncWebServerRequest *request){
     // Implementasikan restart WiFi
-    SerialBT.println("\nMencoba menghubungkan perangkat dengan WiFi yang terdaftar ...");
+    Serial.println("\nMencoba menghubungkan perangkat dengan WiFi yang terdaftar ...");
     if (WiFi.status() == WL_CONNECTED)
     {
       internetAvailable = true;
+      internetAvailable = true;
       WiFi.disconnect(true);
+      delay(2000);
     }
     request->send(200, "text/plain", "Merestart WiFi sistem");
   });

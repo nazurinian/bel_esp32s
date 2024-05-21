@@ -140,7 +140,7 @@ String readPassword()
   }
 }
 
-CustomTime currentTime = {0, 0, 0, 0, 0, 0, 0, ""}; // Atur nilainya ke default jika diperlukan
+CustomTime currentTime = {0, 0, 0, 0, 0, 0, 0, ""};
 
 Schedule jadwalSaatIni;
 Schedule jadwalSelanjutnya;
@@ -150,3 +150,4 @@ String timeOrBel;
 int infoPilihanPutar;
 bool infoPlay;
 bool internetAvailable = true;
+bool isPlaying = false;

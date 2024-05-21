@@ -53,11 +53,25 @@ void cekWaktu(JadwalData masuk, int jamKe)
         waktu5MenitSebelumMasuk.hours -= 1;
     }
 
+    // Nomor 1: 
+    // Tambahkan variabel isPlayed, kondisi true kalau masuk kedalam if putar, 
+    // false kalau diluar if putar, untuk kondisi if putranya yg diluar sendiri 
+    // syaratnya ada dua, 1. Syaratnya kalau isPlayed = true dan menitbel atau 
+    // menit 5 menit sblm msk itu tidak sama dengan menit saat ini
+
+    if (sedangMemutarAudio && (waktu5MenitSebelumMasuk.minutes != currentTime.minutes || masuk.menit != currentTime.minutes))
+    {
+        sedangMemutarAudio = false;
+        return;
+    }
+    
+
     // Memutar sound 5 menit sebelum masuk kelas
-    if (currentTime.hours == waktu5MenitSebelumMasuk.hours && currentTime.minutes == waktu5MenitSebelumMasuk.minutes && masuk.aktif)
+    if (currentTime.hours == waktu5MenitSebelumMasuk.hours && currentTime.minutes == waktu5MenitSebelumMasuk.minutes && masuk.aktif && !sedangMemutarAudio)
     {
         if (jamKe == 1)
         {
+            sedangMemutarAudio = true;
             Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
@@ -65,6 +79,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
         }
         if (jamKe == 2 || jamKe == 7 || jamKe == 14)
         {
+            sedangMemutarAudio = true;
             Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
@@ -72,8 +87,9 @@ void cekWaktu(JadwalData masuk, int jamKe)
         }
     }
 
-    if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif)
+    if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif && !sedangMemutarAudio)
     {
+        sedangMemutarAudio = true;
         if (jamKe == 1)
         {
             Serial.println("Memutar Bel Pulang");
@@ -153,6 +169,7 @@ void cekPemutaranManualLebih1x(long currentMillis)
     case 3:
         if (digitalRead(DFPLAYER_BUSY_PIN))
         {
+            sedangMemutarAudio = true;
             setDisablePutarManual();
         }
         break;
@@ -184,7 +201,7 @@ void putarBelManual(bool mainkan, int choice)
 
     if (sedangMemutarAudio)
     {
-        sedangMemutarAudio = false;
+        // sedangMemutarAudio = false;
         Serial.println("Bel selesai diputar");
         setDisablePutarManual();
         delay(100);

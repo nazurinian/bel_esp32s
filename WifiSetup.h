@@ -8,6 +8,7 @@
 #include "NTPSetup.h"
 #include "FirebaseSetup.h"
 #include "FS.h"
+#include "AudioManager.h"
 #include "Variables.h"
 
 #include <AsyncTCP.h>

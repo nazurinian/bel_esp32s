@@ -67,19 +67,6 @@ void loop()
     Serial.println(" ");
     // volumeControl();
 
-    // if (WiFi.status() != WL_CONNECTED)
-    if (!internetAvailable)
-    {
-      lcdMonitor(0, 1);
-      // if (currentMillis - previousMillisResetWifi >= (interval * 10))
-      // {
-      //   previousMillisResetWifi = currentMillis;
-      //   Serial.println("Anda belum terhubung ke WiFi.");
-      wifiSetup();
-      // }
-      return;
-    }
-
     if (!signupOK && internetAvailable)
     {
       ntpSetup();
@@ -124,6 +111,9 @@ void loop()
     Serial.println(infoPilihanPutar);
     Serial.print("Info Putar Manual: ");
     Serial.println(infoPlay ? "true" : "false");
+
+    Serial.print("SEDANG PUTAR YA GUYS: ");
+    Serial.println(sedangMemutarAudio ? "true" : "false");
 
     putarBelManual(infoPlay, infoPilihanPutar); // PUTAR MANUAL DARI ONLINE ?? INI STUCK
     delay(100); // DELAY LOOP 4 ?? Ada kemungkinan karena delay di dalam kode nonblocking ini
@@ -172,6 +162,19 @@ void loop()
   // Update tiap 10 detik
   if (currentMillis - previousMillisB >= (interval * 10))
   {
+    // if (WiFi.status() != WL_CONNECTED)
+    if (!internetAvailable)
+    {
+      lcdMonitor(0, 1);
+      // if (currentMillis - previousMillisResetWifi >= (interval * 10))
+      // {
+      //   previousMillisResetWifi = currentMillis;
+      //   Serial.println("Anda belum terhubung ke WiFi.");
+      wifiSetup();
+      // }
+      return;
+    }
+    
     if (!hariLibur)
     {
       previousMillisB = currentMillis;
@@ -192,6 +195,7 @@ void loop()
   {
     if (!hariLibur)
     {
+      bool isPlaying = false;
       previousMillisC = currentMillis;
       // To pause stream
       stream.pauseFirebase(true);
