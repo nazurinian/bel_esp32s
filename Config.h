@@ -21,7 +21,7 @@
 #define AP_PASSWORD "config123"
 
 #define SENIN_SAMPAI_KAMIS "/jadwal/senin-kamis/"
-#define JUMAT "/jadwal/JUMAT/"
+#define JUMAT "/jadwal/jumat/"
 #define JAM_MASUK "/jam/"
 #define MENIT_MASUK "/menit/"
 #define STATUS_MASUK "/aktif/"

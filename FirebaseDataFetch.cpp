@@ -66,15 +66,13 @@ void getJsonData()
 void setBelKelasTrue(bool status, int bellChoice) {
   FirebaseJson jsonUp;
   if (status) {
-    json.clear;
     jsonUp.add("putar",  true);
     jsonUp.add("choice", bellChoice);
-    Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+    Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
   } else {
-    json.clear;
     jsonUp.add("putar",  false);
     jsonUp.add("choice", bellChoice);
-    Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+    Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
     // sedangMemutarAudio = false;
     
     playState = 0;
