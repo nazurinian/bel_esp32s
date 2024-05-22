@@ -7,6 +7,7 @@
 #include <WiFi.h>
 #include "NTPSetup.h"
 #include "FirebaseSetup.h"
+#include "FirebaseDataFetch.h"
 #include "FS.h"
 #include "AudioManager.h"
 #include "Variables.h"
@@ -17,6 +18,7 @@
 
 void spiffConfig();
 void saveCredentials(const String &newSSID, const String &newPassword);
+void checkInternetConnection(bool onSetup);
 void wifiSetup();
 void putarBelKelasWiFi(int pilihan);
 void startConfigServer();

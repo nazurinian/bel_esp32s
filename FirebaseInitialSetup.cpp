@@ -51,15 +51,15 @@ void jadwalKelas()
     }
 }
 
-void setDisablePutarManual() {
-    FirebaseJson jsonUp;
-    jsonUp.add("putar",  false);
-    jsonUp.add("choice", 0);
-    Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
-    // Firebase.setIntAsync(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
-    // Firebase.setBoolAsync(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
-    playState = 0;
-}
+// void setDisablePutarManual() {
+//     FirebaseJson jsonUp;
+//     jsonUp.add("putar",  false);
+//     jsonUp.add("choice", 0);
+//     Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+//     // Firebase.setIntAsync(fbdo, String(PUTAR_MANUAL) + String(PILIHAN_PUTAR), 0);
+//     // Firebase.setBoolAsync(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), false);
+//     playState = 0;
+// }
 
 // Setting dan Cek apakah sistem putar manual sudah tersedia?
 void settingBelManual()
@@ -67,11 +67,11 @@ void settingBelManual()
     if (!Firebase.get(fbdo, "/putar-manual"))
     {
         Serial.println("Membuat sistem pemutar bel manual secara online");
-        setDisablePutarManual();
+        setBelKelasTrue(false, 0);
     }
     else
     {
         Serial.println("Bel manual telah siap");
-        setDisablePutarManual();
+        setBelKelasTrue(false, 0);
     }
 }

@@ -87,6 +87,7 @@ extern String timeOrBel;
 extern int infoPilihanPutar;
 extern bool infoPlay;
 extern bool internetAvailable;
-extern bool isPlaying;
+extern bool dataFetched;
+// extern bool isPlaying;
 
 #endif

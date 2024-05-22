@@ -3,7 +3,7 @@
 void putarBelKelas(int pilihan)
 {
     sedangMemutarAudio = true;
-    Firebase.setBool(fbdo, String(PUTAR_MANUAL) + String(STATUS_PUTAR), true);
+    setBelKelasTrue(true, pilihan);
 
     switch (pilihan)
     {
@@ -169,8 +169,8 @@ void cekPemutaranManualLebih1x(long currentMillis)
     case 3:
         if (digitalRead(DFPLAYER_BUSY_PIN))
         {
-            sedangMemutarAudio = true;
-            setDisablePutarManual();
+            sedangMemutarAudio = false;
+            setBelKelasTrue(false, 0);
         }
         break;
     }
@@ -203,7 +203,7 @@ void putarBelManual(bool mainkan, int choice)
     {
         // sedangMemutarAudio = false;
         Serial.println("Bel selesai diputar");
-        setDisablePutarManual();
+        setBelKelasTrue(false, 0);
         delay(100);
         return;
     }
@@ -234,7 +234,7 @@ void stopAudioPlay(long currentMillis) {
             if (sedangMemutarAudio) {
                 sedangMemutarAudio = false;
                 Serial.println("Menghentikan pemutaran audio");
-                setDisablePutarManual();
+                setBelKelasTrue(false, 0);
                 myDFPlayer.stop();
             } else {
                 Serial.println("Tidak sedang memutar audio apapun");

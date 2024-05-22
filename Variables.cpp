@@ -150,4 +150,5 @@ String timeOrBel;
 int infoPilihanPutar;
 bool infoPlay;
 bool internetAvailable = true;
-bool isPlaying = false;
+bool dataFetched = false;
+// bool isPlaying = false;

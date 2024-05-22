@@ -11,5 +11,6 @@
 
 void fetchDataFromFirebase(String day);
 void getJsonData();
+void setBelKelasTrue(bool status, int bellChoice);
 
 #endif

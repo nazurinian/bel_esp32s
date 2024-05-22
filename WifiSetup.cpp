@@ -38,6 +38,30 @@ void saveCredentials(const String &newSSID, const String &newPassword)
   }
 }
 
+// Fungsi untuk mengecek koneksi internet dengan ping
+void checkInternetConnection(bool onSetup) {
+  if (Ping.ping("www.google.com")) {
+      Serial.println("Ping successful");
+      Serial.println("Sistem telah tersambung ke internet");
+      internetAvailable = true;
+      dataFetched = true;
+      startWifiConfig = false;
+
+      if(onSetup) {
+        ntpSetup();
+        delay(100);
+        firebaseSetup();
+      } else {
+        timeClient.forceUpdate();
+      }
+  } else {
+      Serial.println("Ping failed");
+      Serial.println("Sistem tidak terhubung internet saat ini");
+      internetAvailable = false;
+      dataFetched = false;
+  }
+}
+
 void wifiSetup()
 {
   // Inisialisasi SPIFFS
@@ -47,16 +71,24 @@ void wifiSetup()
   Serial.println(readSSID().c_str());
 
   // Coba koneksi ke WiFi dengan SSID dan password default
-  WiFi.begin(readSSID().c_str(), readPassword().c_str());
+  if (WiFi.status() != WL_CONNECTED) {
+    WiFi.begin(readSSID().c_str(), readPassword().c_str());
+  }
+  
   int attempt = 0;
   // while (WiFi.status() != WL_CONNECTED && attempt < 10 && internetAvailable)
-  while (WiFi.status() != WL_CONNECTED && attempt < 10)
-  {
-    if (attempt == 9)
-    {
-      internetAvailable = false;
-    }
+  // {
+  //   if (attempt == 9)
+  //   {
+  //     internetAvailable = false;
+  //   }
     
+  //   delay(500);
+  //   Serial.print(".");
+  //   attempt++;
+  // }
+  while (WiFi.status() != WL_CONNECTED && attempt < 10)
+  {    
     delay(500);
     Serial.print(".");
     attempt++;
@@ -71,13 +103,7 @@ void wifiSetup()
   {
     Serial.println("\nGagal terhubung ke WiFi menggunakan SSID dan password default.");
 
-    if (hotspotStatus || startWifiConfig)
-    {
-      return;
-    }
-
-    if (!startWifiConfig)
-    {
+    if (!hotspotStatus && !startWifiConfig) {
       startConfigServer();
       startWifiConfig = true;
       hotspotStatus = true;
@@ -96,20 +122,8 @@ void wifiSetup()
 
     digitalWrite(LED_1_GREEN_PIN, LOW);
     delay(100);
-
-    if (Ping.ping("www.google.com")) {
-      Serial.println("Ping successful");
-      Serial.println("Sistem telah tersambung ke internet");
-      internetAvailable = true;
-      startWifiConfig = false;
-      ntpSetup();
-      delay(100);
-      firebaseSetup();
-    } else {
-      Serial.println("Ping failed");
-      Serial.println("Sistem tidak terhubung internet saat ini");
-      internetAvailable = false;
-    }
+    
+    checkInternetConnection(true);
   }
 
   delay(100);
@@ -261,14 +275,10 @@ void startConfigServer() {
         return;
       }
 
-      FirebaseJson jsonUp;
-      jsonUp.add("putar",  true);
-      jsonUp.add("choice", bellChoice);
-      Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
-
       putarBelManual(true, bellChoice); 
+
       request->send(200, "text/plain", "Memutar Bel pilihan ke-" + String(bellChoice));
-      delay(100);
+      delay(1000);
     } else {
       request->send(400, "text/plain", "Gagal memutar bel");
     }
@@ -295,7 +305,7 @@ void startConfigServer() {
     {
       message = "Pemutaran bel dihentikan";
       Serial.println(message);
-      setDisablePutarManual();
+      setBelKelasTrue(false, 0);
       myDFPlayer.stop();
     }
     else

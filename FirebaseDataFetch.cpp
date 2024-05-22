@@ -1,7 +1,7 @@
 #include "FirebaseDataFetch.h"
 
 void fetchDataFromFirebase(String day)
-{ // CURIGA NOMOR 1 - CURIGA NOMOR 2 KARENA BANYAK VAR DAN FUNGSI
+{ 
     HTTPClient http;
 
     // Build Firebase URL
@@ -14,6 +14,7 @@ void fetchDataFromFirebase(String day)
         String payload = http.getString(); // JSON DATA
         Serial.print("Firebase response: ");
         Serial.println(httpResponseCode);
+        dataFetched = true;
 
         // Parse JSON
         DeserializationError error = deserializeJson(json, payload);
@@ -21,6 +22,7 @@ void fetchDataFromFirebase(String day)
         {
             Serial.print("deserializeJson() failed: ");
             Serial.println(error.c_str());
+            dataIsAvailable = false;
         }
         else
         {
@@ -33,6 +35,7 @@ void fetchDataFromFirebase(String day)
     {
         Serial.print("Error on HTTP request: ");
         Serial.println(httpResponseCode);
+        dataFetched = false;
     }
 
     http.end();
@@ -58,4 +61,22 @@ void getJsonData()
         hariLibur = true;
         Serial.println("Sekarang waktu libur Sabtu dan Minggu");
     }
+}
+
+void setBelKelasTrue(bool status, int bellChoice) {
+  FirebaseJson jsonUp;
+  if (status) {
+    json.clear;
+    jsonUp.add("putar",  true);
+    jsonUp.add("choice", bellChoice);
+    Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+  } else {
+    json.clear;
+    jsonUp.add("putar",  false);
+    jsonUp.add("choice", bellChoice);
+    Firebase.updateNode(fbdo, String(PUTAR_MANUAL), jsonUp);
+    // sedangMemutarAudio = false;
+    
+    playState = 0;
+  }
 }
