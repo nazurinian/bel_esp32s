@@ -65,9 +65,6 @@ void getJsonData()
 
 void setBelKelasTrue(bool status, int bellChoice)
 {
-    // stream.pauseFirebase(true);
-    // stream.clear();
-    // delay(1000);
     FirebaseJson jsonUp;
     if (status)
     {
@@ -83,7 +80,4 @@ void setBelKelasTrue(bool status, int bellChoice)
 
         playState = 0;
     }
-
-    // stream.pauseFirebase(false);
-    // Firebase.setStreamCallback(stream, streamCallback, streamTimeoutCallback);
 }

@@ -262,14 +262,6 @@ void stopAudioPlay(long currentMillis)
 
             if (sedangMemutarAudio)
             {
-                // ini ga perlu cek play karena ya kalo error dalam arti lampunya gak mati ya tinggal pencet lagi aja
-                // sedangMemutarAudio = false;
-                // isPlaying = false;
-                // Serial.println("Menghentikan pemutaran audio");
-                // setBelKelasTrue(false, 0);
-                // myDFPlayer.stop();
-                // delay(100);
-
                 setBelKelasTrue(false, 0);
                 delay(500);
                 if (!infoPlay)

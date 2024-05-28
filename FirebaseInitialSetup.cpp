@@ -74,7 +74,7 @@ void jadwalKelas()
 // Setting dan Cek apakah sistem putar manual sudah tersedia?
 void settingBelManual()
 {
-    if (!Firebase.get(fbdo, "/putar-manual"))
+    if (!Firebase.pathExist(fbdo, "/putar-manual"))
     {
         Serial.println("Membuat sistem pemutar bel manual secara online");
         setBelKelasTrue(false, 0);
