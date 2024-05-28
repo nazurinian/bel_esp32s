@@ -30,7 +30,7 @@
 #define STATUS_PUTAR "/putar"
 #define PILIHAN_PUTAR "/choice"
 
-#define GMT_OFFSET_SEC (7 * 3600)
+#define GMT_OFFSET_SEC (8 * 3600)
 #define JUMLAH_JADWAL 16
 
 #endif
