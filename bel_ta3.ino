@@ -139,8 +139,6 @@ void loop() {
   stopAudioPlay(currentMillis);
 
   // Update setiap detik
-  digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
-
   if (currentMillis - previousMillisA >= interval) {
     previousMillisA = currentMillis;
     timeClient.update();
@@ -156,8 +154,6 @@ void loop() {
     if (!checkFirebaseStreaming()) return;
     if (checkSDStatus(sdStatus)) return;
 
-    cekPemutaranManualLebih1x(currentMillis);
-
     displayPlaybackInfo();
     if (playState == 0)
     {
@@ -169,6 +165,14 @@ void loop() {
 
     serialMonitor();
     lcdMonitor(1);
+  }
+
+  // check setiap 0,2 detik
+  if (currentMillis - previousLoopCheck >= intervalCheck)
+  {
+    previousLoopCheck = currentMillis;
+    digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
+    cekPemutaranManualLebih1x();
   }
 
   // Update setiap 10 detik
