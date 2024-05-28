@@ -141,7 +141,7 @@ void loop() {
   stopAudioPlay(currentMillis);
 
   // Update setiap detik
-  if (currentMillis - previousMillisA >= interval) {
+  if ((currentMillis - previousMillisA) >= interval) {
     previousMillisA = currentMillis;
     timeClient.update();
     currentTime = getCurrentTime(timeClient);
@@ -170,7 +170,7 @@ void loop() {
   }
 
   // check setiap 0,2 detik
-  if (currentMillis - previousLoopCheck >= intervalCheck)
+  if ((currentMillis - previousLoopCheck) >= (interval * 0.2))
   {
     previousLoopCheck = currentMillis;
     digitalWrite(LED_2_RED_PIN, isPlaying ? HIGH : LOW);
@@ -178,7 +178,7 @@ void loop() {
   }
 
   // Update setiap 10 detik
-  if (currentMillis - previousMillisB >= (interval * 10)) {
+  if ((currentMillis - previousMillisB) >= (interval * 10)) {
     if (WiFi.status() != WL_CONNECTED || !internetAvailable)
     {
       Serial.println("Mencoba menghubungkan ulang sistem dengan WiFi yang terdaftar.");
@@ -200,25 +200,10 @@ void loop() {
     }
   }
 
-  // check setiap 2 menit
-  // if (hitungMundurStop)
-  // {
-  //   if (currentMillis - pvMillisStopPlay >= (interval * 120))
-  //   {
-  //     hitungMundurStop = false;
-  //     pvMillisStopPlay = currentMillis;
-
-  //     Serial.println("Bel selesai diputar");
-  //     setBelKelasTrue(false, 0);
-  //     delay(100);
-  //     return;
-  //   }
-  // }
-
   // Periksa status pemutaran manual setiap 5 menit
   if (infoPlay)
   {
-    if (currentMillis - pvMillisObservePlayStatus >= (interval * 300))
+    if ((currentMillis - pvMillisObservePlayStatus) >= (interval * 300))
     {
         pvMillisObservePlayStatus = currentMillis;
         // setDisablePutarManual();
@@ -229,7 +214,7 @@ void loop() {
   }
 
   // Clear memori setiap 2 jam
-  if (currentMillis - previousMillisC >= (interval * 7200)) {
+  if ((currentMillis - previousMillisC) >= (interval * 7200)) {
     if (!hariLibur) {
       previousMillisC = currentMillis;
       clearFirebaseStream();

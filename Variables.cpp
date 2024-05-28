@@ -23,14 +23,9 @@ bool hariLibur = false;
 unsigned long previousMillisA = 0;
 unsigned long previousMillisB = 0;
 unsigned long previousMillisC = 0;
-unsigned long previousMillisResetWifi = 0;
 unsigned long pvMillisObservePlayStatus = 0;
-unsigned long pvMillisStopPlay = 0;
+unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
 const long interval = 1000;
-
-int button1State = 0;
-bool menuDisplayed = false;
-bool choiceMade = false;
 
 bool displayTime = true;
 bool displaySchedule = false;
@@ -39,15 +34,9 @@ bool clearDisplayOffline = true;
 
 int volumeLevel = 0;
 bool sedangMemutarAudio = false;
-
 int playState = 0; // 0: tidak memutar, 1: memutar pertama, 2: memutar kedua
-unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
-unsigned long intervalCheck = 200;   // Interval untuk memeriksa status DFPlayer
 
-String newSSIDBT = "";
-String newPasswordBT = "";
-
-bool btStatus = false;
+int button1State = 0;
 bool startWifiConfig = false;
 int button2State = 0;
 bool hotspotStatus = false;
@@ -147,10 +136,9 @@ Schedule jadwalSelanjutnya;
 String nowOrNext;
 String timeOrBel;
 
-int infoPilihanPutar;
-bool infoPlay;
 bool internetAvailable = true;
 bool dataFetched = false;
+int infoPilihanPutar;
+bool infoPlay;
 bool isPlaying = false;
-// bool hitungMundurStop = false;
 int menitPutar = 0;

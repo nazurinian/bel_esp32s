@@ -31,14 +31,9 @@ extern bool hariLibur;
 extern unsigned long previousMillisA;
 extern unsigned long previousMillisB;
 extern unsigned long previousMillisC;
-extern unsigned long previousMillisResetWifi;
 extern unsigned long pvMillisObservePlayStatus;
-extern unsigned long pvMillisStopPlay;
+extern unsigned long previousLoopCheck;
 extern const long interval;
-
-extern int button1State;
-extern bool menuDisplayed;
-extern bool choiceMade;
 
 extern bool displayTime;
 extern bool displaySchedule;
@@ -47,15 +42,9 @@ extern bool clearDisplayOffline;
 
 extern int volumeLevel;
 extern bool sedangMemutarAudio;
-
 extern int playState;
-extern unsigned long previousLoopCheck;
-extern unsigned long intervalCheck;
 
-extern String newSSIDBT;
-extern String newPasswordBT;
-
-extern bool btStatus;
+extern int button1State;
 extern bool startWifiConfig;
 extern int button2State;
 extern bool hotspotStatus;
@@ -84,12 +73,11 @@ extern Schedule jadwalSelanjutnya;
 extern String nowOrNext;
 extern String timeOrBel;
 
-extern int infoPilihanPutar;
-extern bool infoPlay;
 extern bool internetAvailable;
 extern bool dataFetched;
+extern int infoPilihanPutar;
+extern bool infoPlay;
 extern bool isPlaying;
-// extern bool hitungMundurStop;
 extern int menitPutar;
 
 #endif

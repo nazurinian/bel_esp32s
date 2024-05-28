@@ -25,7 +25,6 @@ void putarBelKelas(int pilihan)
         break;
     case 4:
         // Audio 5 Menit Sebelum Bel
-        // myDFPlayer.play(12);
         myDFPlayer.play(random(1, 41));
         break;
     case 5:
