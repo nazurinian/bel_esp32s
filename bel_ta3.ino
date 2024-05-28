@@ -24,7 +24,7 @@ void setup()
   delay(100); // DELAY SETUP 5
 
   // IO Setup
-  pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth 
+  pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth
   pinMode(BUTTON_2_PIN, INPUT_PULLUP); // WiFi Manager
   pinMode(LED_PIN, OUTPUT);            // Lampu biru bawaan ESP32
   pinMode(LED_1_GREEN_PIN, OUTPUT);    // Lampu merah ESP32
@@ -35,8 +35,10 @@ void setup()
   randomSeed(analogRead(0));
 }
 
-bool checkWiFiConnection() {
-  if (WiFi.status() != WL_CONNECTED) {
+bool checkWiFiConnection()
+{
+  if (WiFi.status() != WL_CONNECTED)
+  {
     lcdMonitor(0, 1);
     Serial.println("Anda belum terhubung ke WiFi.");
     return false;
@@ -44,8 +46,10 @@ bool checkWiFiConnection() {
   return true;
 }
 
-bool checkInternetAvailability() {
-  if (!internetAvailable) {
+bool checkInternetAvailability()
+{
+  if (!internetAvailable)
+  {
     lcdMonitor(0, 2);
     Serial.println("Tidak ada koneksi internet.");
     return false;
@@ -53,8 +57,10 @@ bool checkInternetAvailability() {
   return true;
 }
 
-bool checkFirebaseSignup() {
-  if (!signupOK && internetAvailable) {
+bool checkFirebaseSignup()
+{
+  if (!signupOK && internetAvailable)
+  {
     ntpSetup();
     delay(100);
     firebaseSetup();
@@ -64,8 +70,10 @@ bool checkFirebaseSignup() {
   return true;
 }
 
-bool refreshFirebaseToken() {
-  if (Firebase.isTokenExpired()) {
+bool refreshFirebaseToken()
+{
+  if (Firebase.isTokenExpired())
+  {
     Firebase.refreshToken(&config);
     Serial.println("Refresh token");
     delay(100);
@@ -74,8 +82,10 @@ bool refreshFirebaseToken() {
   return true;
 }
 
-bool checkFirebaseReady() {
-  if (!Firebase.ready()) {
+bool checkFirebaseReady()
+{
+  if (!Firebase.ready())
+  {
     lcdMonitor(0, 3);
     Serial.println(fbdo.errorReason());
     return false;
@@ -83,8 +93,10 @@ bool checkFirebaseReady() {
   return true;
 }
 
-bool checkFirebaseStreaming() {
-  if (!stream.httpConnected()) {
+bool checkFirebaseStreaming()
+{
+  if (!stream.httpConnected())
+  {
     lcdMonitor(0, 3);
     Serial.println("Gagal melakukan streaming data pemutaran di server");
     return false;
@@ -92,36 +104,47 @@ bool checkFirebaseStreaming() {
   return true;
 }
 
-bool checkSDStatus(int sdStatus) {
-  if (sdStatus == 0) {
+bool checkSDStatus(int sdStatus)
+{
+  if (sdStatus == 0)
+  {
     lcdMonitor(0, 4);
     return true;
   }
   return false;
 }
 
-void displayPlaybackInfo() {
+void displayPlaybackInfo()
+{
   Serial.print("Info Pilihan Putar: ");
   Serial.println(infoPilihanPutar);
   Serial.print("Info Putar Otomatis / Manual: ");
   Serial.println(infoPlay ? "true" : "false");
 }
 
-void handleAutomaticPlayback() {
-  if (dataIsAvailable) {
+void handleAutomaticPlayback()
+{
+  if (dataIsAvailable)
+  {
     putarBelOtomatis(json);
     delay(100);
-  } else {
-    if (hariLibur) {
+  }
+  else
+  {
+    if (hariLibur)
+    {
       Serial.println("Hari ini adalah hari libur, Tidak ada jadwal bel yang aktif");
-    } else {
+    }
+    else
+    {
       getJsonData();
       delay(100);
     }
   }
 }
 
-void clearFirebaseStream() {
+void clearFirebaseStream()
+{
   stream.pauseFirebase(true);
   stream.clear();
   delay(1000);
@@ -129,7 +152,8 @@ void clearFirebaseStream() {
   Firebase.setStreamCallback(stream, streamCallback, streamTimeoutCallback);
 }
 
-void loop() {
+void loop()
+{
   unsigned long currentMillis = millis();
   int sdStatus = myDFPlayer.readState();
 
@@ -137,20 +161,28 @@ void loop() {
   stopAudioPlay(currentMillis);
 
   // Update setiap detik
-  if ((currentMillis - previousMillisA) >= interval) {
+  if ((currentMillis - previousMillisA) >= interval)
+  {
     previousMillisA = currentMillis;
     timeClient.update();
     currentTime = getCurrentTime(timeClient);
 
     Serial.println(" ");
-    
-    if (!checkWiFiConnection()) return;
-    if (!checkInternetAvailability()) return;
-    if (!checkFirebaseSignup()) return;
-    if (!refreshFirebaseToken()) return;
-    if (!checkFirebaseReady()) return;
-    if (!checkFirebaseStreaming()) return;
-    if (checkSDStatus(sdStatus)) return;
+
+    if (!checkWiFiConnection())
+      return;
+    if (!checkInternetAvailability())
+      return;
+    if (!checkFirebaseSignup())
+      return;
+    if (!refreshFirebaseToken())
+      return;
+    if (!checkFirebaseReady())
+      return;
+    if (!checkFirebaseStreaming())
+      return;
+    if (checkSDStatus(sdStatus))
+      return;
 
     displayPlaybackInfo();
     if (playState == 0)
@@ -174,20 +206,24 @@ void loop() {
   }
 
   // Update setiap 10 detik
-  if ((currentMillis - previousMillisB) >= (interval * 10)) {
+  if ((currentMillis - previousMillisB) >= (interval * 10))
+  {
     if (WiFi.status() != WL_CONNECTED || !internetAvailable)
     {
       Serial.println("Mencoba menghubungkan ulang sistem dengan WiFi yang terdaftar.");
       wifiSetup();
       return;
-    }  
+    }
 
-    if (!hariLibur) {
+    if (!hariLibur)
+    {
       previousMillisB = currentMillis;
       Serial.println(" ");
-      if (checkSDStatus(sdStatus)) return;
+      if (checkSDStatus(sdStatus))
+        return;
       displayTime = !displayTime;
-      if (!dataFetched && dataIsAvailable){
+      if (!dataFetched && dataIsAvailable)
+      {
         checkInternetConnection(false);
         return;
       }
@@ -201,17 +237,22 @@ void loop() {
   {
     if ((currentMillis - pvMillisObservePlayStatus) >= (interval * 300))
     {
-        pvMillisObservePlayStatus = currentMillis;
-        // setDisablePutarManual();
+      pvMillisObservePlayStatus = currentMillis;
+      setBelKelasTrue(false, 0);
+      delay(500);
+      if (!infoPlay)
+      {
         sedangMemutarAudio = false;
         infoPlay = false;
-        setBelKelasTrue(false, 0);
+      }
     }
   }
 
   // Clear memori setiap 2 jam
-  if ((currentMillis - previousMillisC) >= (interval * 7200)) {
-    if (!hariLibur) {
+  if ((currentMillis - previousMillisC) >= (interval * 7200))
+  {
+    if (!hariLibur)
+    {
       previousMillisC = currentMillis;
       clearFirebaseStream();
     }

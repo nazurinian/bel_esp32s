@@ -2,54 +2,26 @@
 
 void jadwalKelas()
 {
-    // Firebase.pathExist 
+    // Firebase.pathExist
     if (!Firebase.pathExist(fbdo, "/jadwal"))
     {
         Serial.println("Jadwal Kelas belum ada");
         Serial.println("Jadwal Kelas akan dibuat ...");
 
         // Jadwal Senin - Kamis
-        // if (!Firebase.get(fbdo, SENIN_SAMPAI_KAMIS))
-        // {
-            for (int i = 0; i < 16; i++)
-            {
-                // Set waktu masuk
-                Firebase.setInt(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + JAM_MASUK, jadwal[i].jam);
-                Firebase.setInt(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + MENIT_MASUK, jadwal[i].menit);
-                // Set info aktif untuk waktu masuk
-                Firebase.setBool(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + STATUS_MASUK, true);
-            }
+        for (int i = 0; i < 16; i++)
+        {
+            // Set waktu masuk
+            Firebase.setInt(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + JAM_MASUK, jadwal[i].jam);
+            Firebase.setInt(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + MENIT_MASUK, jadwal[i].menit);
+            // Set info aktif untuk waktu masuk
+            Firebase.setBool(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + STATUS_MASUK, true);
+        }
 
-            Serial.println("Selesai membuat Jadwal Kelas Senin - Kamis");
-        // }
+        Serial.println("Selesai membuat Jadwal Kelas Senin - Kamis");
         delay(1000);
 
         // Jadwal Jum'at (Khusus)
-        // if (!Firebase.get(fbdo, JUMAT))
-        // {
-            for (int i = 0; i < 16; i++)
-            {
-                int jamKe = i + 1;
-                // Set waktu masuk
-                Firebase.setInt(fbdo, JUMAT + String(i + 1) + JAM_MASUK, jadwal[i].jam);
-                Firebase.setInt(fbdo, JUMAT + String(i + 1) + MENIT_MASUK, jadwal[i].menit);
-                // Set info aktif untuk waktu masuk
-                if (jamKe >= 11 && jamKe <= 13)
-                {
-                    Firebase.setBool(fbdo, JUMAT + String(i + 1) + STATUS_MASUK, false);
-                }
-                else
-                {
-                    Firebase.setBool(fbdo, JUMAT + String(i + 1) + STATUS_MASUK, true);
-                }
-            }
-
-            Serial.println("Selesai membuat Jadwal Kelas Jum'at");
-            delay(1000);
-        // }
-    }
-    else
-    {
         for (int i = 0; i < 16; i++)
         {
             int jamKe = i + 1;
@@ -57,6 +29,28 @@ void jadwalKelas()
             Firebase.setInt(fbdo, JUMAT + String(i + 1) + JAM_MASUK, jadwal[i].jam);
             Firebase.setInt(fbdo, JUMAT + String(i + 1) + MENIT_MASUK, jadwal[i].menit);
             // Set info aktif untuk waktu masuk
+            if (jamKe >= 11 && jamKe <= 13)
+            {
+                Firebase.setBool(fbdo, JUMAT + String(i + 1) + STATUS_MASUK, false);
+            }
+            else
+            {
+                Firebase.setBool(fbdo, JUMAT + String(i + 1) + STATUS_MASUK, true);
+            }
+        }
+
+        Serial.println("Selesai membuat Jadwal Kelas Jum'at");
+        delay(1000);
+    }
+    else
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            // Set info aktif untuk waktu masuk senin-kamis
+            Firebase.setBool(fbdo, SENIN_SAMPAI_KAMIS + String(i + 1) + STATUS_MASUK, true);
+
+            // Set info aktif untuk waktu masuk jumat
+            int jamKe = i + 1;
             if (jamKe >= 11 && jamKe <= 13)
             {
                 Firebase.setBool(fbdo, JUMAT + String(i + 1) + STATUS_MASUK, false);

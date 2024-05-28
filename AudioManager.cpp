@@ -54,7 +54,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
         waktu5MenitSebelumMasuk.minutes += 60;
         waktu5MenitSebelumMasuk.hours -= 1;
     }
-    
+
     // Memutar sound 5 menit sebelum masuk kelas
     if (currentTime.hours == waktu5MenitSebelumMasuk.hours && currentTime.minutes == waktu5MenitSebelumMasuk.minutes && masuk.aktif && !sedangMemutarAudio)
     {

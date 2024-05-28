@@ -21,7 +21,7 @@ void setupDFPlayer()
   LCD.clear();
   Serial.println(F("DFPlayer Mini online."));
 
-  myDFPlayer.volume(20);           // Set volume level (0-30)
+  myDFPlayer.volume(20);             // Set volume level (0-30)
   pinMode(DFPLAYER_BUSY_PIN, INPUT); // Mengatur pin BUSY sebagai input
 }
 

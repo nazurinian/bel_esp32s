@@ -10,21 +10,27 @@ void streamCallback(StreamData data)
         return;
     }
 
-    // Informasi Streamnya : 
+    // Informasi Streamnya :
     // 1. stream path, "/putar-manual", data.streamPath().c_str() (karena disini itu make pathnya utama yg artinya objeknya langsung, maka jika path cabang yg berubah brt liat eventnya)
     // 2. event path, "/", data.dataPath().c_str()
     // 3. data type, "json", data.dataType().c_str()
     // 4. event type, put, data.eventType().c_str())
     if (data.streamPath() == PUTAR_MANUAL)
     {
-        if (data.dataPath() == STATUS_PUTAR) {
+        if (data.dataPath() == STATUS_PUTAR)
+        {
             infoPlay = data.boolData(); // data.to<bool>();
-        } else if (data.dataPath() == PILIHAN_PUTAR) {
+        }
+        else if (data.dataPath() == PILIHAN_PUTAR)
+        {
             infoPilihanPutar = data.intData(); // data.to<int>();
-        } else { // ini event pathnya "/" ya...
+        }
+        else
+        { // ini event pathnya "/" ya...
             FirebaseJson json = data.jsonObject();
             FirebaseJsonData jsonData;
-            if (json.get(jsonData, STATUS_PUTAR)) {
+            if (json.get(jsonData, STATUS_PUTAR))
+            {
                 infoPlay = jsonData.boolValue;
             }
             if (json.get(jsonData, PILIHAN_PUTAR))

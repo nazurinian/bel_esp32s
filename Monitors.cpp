@@ -77,10 +77,13 @@ void lcdMonitor(int type, int error)
         // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
         // 4. Masalah koneksi DFPlayer di awal setup
-        if (displayTime) {
+        if (displayTime)
+        {
             displayNextSchedule = true;
             displaySchedule = false;
-        } else {
+        }
+        else
+        {
             displaySchedule = true;
             displayNextSchedule = false;
         }
@@ -171,5 +174,4 @@ void serialMonitor()
 
     Serial.println("Jadwal bel saat ini : " + now);
     Serial.println("Jadwal bel yang akan datang : " + next);
-
 }
