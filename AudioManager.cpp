@@ -140,11 +140,18 @@ void cekPemutaranManualLebih1x()
             delay(100);
             return;
         }
-        playState = 0;
-        Serial.println("Bel selesai diputar");
-        sedangMemutarAudio = false;
-        isPlaying = false;
+
         setBelKelasTrue(false, 0);
+        delay(500);
+        if (!infoPlay)
+        {
+            playState = 0;
+            sedangMemutarAudio = false;
+            isPlaying = false;
+            Serial.println("Bel selesai diputar");
+        }
+        return;
+
         break;
     }
 }
@@ -166,11 +173,14 @@ void putarBelOtomatis(JsonDocument &json)
         }
         else if (currentTime.minutes != menitPutar)
         {
-            sedangMemutarAudio = false;
-            isPlaying = false;
-            Serial.println("Bel selesai diputar");
             setBelKelasTrue(false, 0);
-            delay(100);
+            delay(500);
+            if (!infoPlay)
+            {
+                sedangMemutarAudio = false;
+                isPlaying = false;
+                Serial.println("Bel selesai diputar");
+            }
             return;
         }
     }
@@ -215,11 +225,14 @@ void putarBelManual(bool mainkan, int choice)
         }
         else if (currentTime.minutes != menitPutar)
         {
-            sedangMemutarAudio = false;
-            isPlaying = false;
-            Serial.println("Bel selesai diputar");
             setBelKelasTrue(false, 0);
-            delay(100);
+            delay(500);
+            if (!infoPlay)
+            {
+                sedangMemutarAudio = false;
+                isPlaying = false;
+                Serial.println("Bel selesai diputar");
+            }
             return;
         }
     }
@@ -249,11 +262,25 @@ void stopAudioPlay(long currentMillis)
 
             if (sedangMemutarAudio)
             {
-                sedangMemutarAudio = false;
-                isPlaying = false;
-                Serial.println("Menghentikan pemutaran audio");
+                // ini ga perlu cek play karena ya kalo error dalam arti lampunya gak mati ya tinggal pencet lagi aja
+                // sedangMemutarAudio = false;
+                // isPlaying = false;
+                // Serial.println("Menghentikan pemutaran audio");
+                // setBelKelasTrue(false, 0);
+                // myDFPlayer.stop();
+                // delay(100);
+
                 setBelKelasTrue(false, 0);
-                myDFPlayer.stop();
+                delay(500);
+                if (!infoPlay)
+                {
+                    sedangMemutarAudio = false;
+                    isPlaying = false;
+                    Serial.println("Menghentikan pemutaran audio");
+                    myDFPlayer.stop();
+                    delay(100);
+                }
+                return;
             }
             else
             {
