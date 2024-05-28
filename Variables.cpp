@@ -25,6 +25,7 @@ unsigned long previousMillisB = 0;
 unsigned long previousMillisC = 0;
 unsigned long previousMillisResetWifi = 0;
 unsigned long pvMillisObservePlayStatus = 0;
+unsigned long pvMillisStopPlay = 0;
 const long interval = 1000;
 
 int button1State = 0;
@@ -150,4 +151,6 @@ int infoPilihanPutar;
 bool infoPlay;
 bool internetAvailable = true;
 bool dataFetched = false;
-// bool isPlaying = false;
+bool isPlaying = false;
+// bool hitungMundurStop = false;
+int menitPutar = 0;

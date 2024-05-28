@@ -73,7 +73,6 @@ void setBelKelasTrue(bool status, int bellChoice) {
     jsonUp.add("putar",  false);
     jsonUp.add("choice", bellChoice);
     Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
-    // sedangMemutarAudio = false;
     
     playState = 0;
   }

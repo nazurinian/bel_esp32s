@@ -235,6 +235,7 @@ void startConfigServer() {
     {
       message = "Pemutaran bel dihentikan";
       sedangMemutarAudio = false;
+      isPlaying = false;
       Serial.println(message);
       setBelKelasTrue(false, 0);
       myDFPlayer.stop();

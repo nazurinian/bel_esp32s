@@ -31,6 +31,8 @@ void setup()
   pinMode(LED_2_RED_PIN, OUTPUT);      // Lampu hijau ESP32
   pinMode(BUTTON_3_PIN, INPUT_PULLUP); // Tombol Stop Play
   pinMode(LED_3_COLOR_PIN, OUTPUT);    // Lampu hijau ESP32
+
+  randomSeed(analogRead(0));
 }
 
 bool checkWiFiConnection() {
@@ -158,8 +160,8 @@ void loop() {
     if (playState == 0)
     {
       handleAutomaticPlayback();
-
       putarBelManual(infoPlay, infoPilihanPutar);
+
       delay(100);
     }
 
@@ -171,15 +173,7 @@ void loop() {
   if (currentMillis - previousLoopCheck >= intervalCheck)
   {
     previousLoopCheck = currentMillis;
-    digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
-    cekPemutaranManualLebih1x();
-  }
-
-  // check setiap 1 menit
-  if (currentMillis - previousLoopCheck >= intervalCheck)
-  {
-    previousLoopCheck = currentMillis;
-    digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
+    digitalWrite(LED_2_RED_PIN, isPlaying ? HIGH : LOW);
     cekPemutaranManualLebih1x();
   }
 
@@ -206,6 +200,21 @@ void loop() {
     }
   }
 
+  // check setiap 2 menit
+  // if (hitungMundurStop)
+  // {
+  //   if (currentMillis - pvMillisStopPlay >= (interval * 120))
+  //   {
+  //     hitungMundurStop = false;
+  //     pvMillisStopPlay = currentMillis;
+
+  //     Serial.println("Bel selesai diputar");
+  //     setBelKelasTrue(false, 0);
+  //     delay(100);
+  //     return;
+  //   }
+  // }
+
   // Periksa status pemutaran manual setiap 5 menit
   if (infoPlay)
   {
@@ -213,6 +222,8 @@ void loop() {
     {
         pvMillisObservePlayStatus = currentMillis;
         // setDisablePutarManual();
+        sedangMemutarAudio = false;
+        infoPlay = false;
         setBelKelasTrue(false, 0);
     }
   }

@@ -33,6 +33,7 @@ extern unsigned long previousMillisB;
 extern unsigned long previousMillisC;
 extern unsigned long previousMillisResetWifi;
 extern unsigned long pvMillisObservePlayStatus;
+extern unsigned long pvMillisStopPlay;
 extern const long interval;
 
 extern int button1State;
@@ -87,6 +88,8 @@ extern int infoPilihanPutar;
 extern bool infoPlay;
 extern bool internetAvailable;
 extern bool dataFetched;
-// extern bool isPlaying;
+extern bool isPlaying;
+// extern bool hitungMundurStop;
+extern int menitPutar;
 
 #endif
