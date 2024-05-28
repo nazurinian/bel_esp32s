@@ -76,27 +76,12 @@ void wifiSetup()
   }
   
   int attempt = 0;
-  // while (WiFi.status() != WL_CONNECTED && attempt < 10 && internetAvailable)
-  // {
-  //   if (attempt == 9)
-  //   {
-  //     internetAvailable = false;
-  //   }
-    
-  //   delay(500);
-  //   Serial.print(".");
-  //   attempt++;
-  // }
   while (WiFi.status() != WL_CONNECTED && attempt < 10)
   {    
     delay(500);
     Serial.print(".");
     attempt++;
   }
-
-  // Menonaktifkan Bluetooth
-  // btStatus = false;
-  // startWifiConfig = false;
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
@@ -129,55 +114,6 @@ void wifiSetup()
   delay(100);
 }
 
-// void startConfigServer()
-// {
-//   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
-
-//   if (AP_PASSWORD == "")
-//   {
-//     WiFi.softAP(AP_SSID);
-//   }
-//   else
-//   {
-//     WiFi.softAP(AP_SSID, AP_PASSWORD);
-//   }
-
-//   IPAddress IP = WiFi.softAPIP();
-//   Serial.print("Alamat IP AP: ");
-//   Serial.println(IP);
-
-//   // Menentukan handle untuk root endpoint ("/")
-//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-//             {
-//     // Membaca isi file HTML dari SPIFFS dan mengirimkannya sebagai respons
-//     File file = SPIFFS.open("/index.html", "r");
-//     if (file) {
-//       request->send(SPIFFS,  "/index.html", "text/html", false);
-//     } else {
-//       request->send(404, "text/plain", "Halaman tidak ditemukan.");
-//     } });
-
-//   // Menentukan handle untuk endpoint "/set-credentials"
-//   server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request)
-//             {
-//     // Mendapatkan SSID dan password dari formulir yang disubmit
-//     String newSSID = request->arg("ssid");
-//     String newPassword = request->arg("password");
-
-//     // Menyimpan SSID dan password ke dalam file SPIFFS
-//     saveCredentials(newSSID, newPassword);
-
-//     // Mengirim respons bahwa perubahan berhasil
-//     request->send(200, "text/plain", "SSID dan password berhasil diperbarui. Perangkat akan direstart.");
-//     delay(1000);
-
-//     // Merestart perangkat setelah merubah konfigurasi
-//     ESP.restart(); });
-
-//   // Memulai server web
-//   server.begin();
-// }
-
 // Fungsi untuk memutar bel
 void putarBelKelasWiFi(int pilihan) {
   // Implementasi pemutaran bel sesuai pilihan
@@ -209,12 +145,6 @@ void startConfigServer() {
   IPAddress IP = WiFi.softAPIP();
   Serial.print("Alamat IP AP: ");
   Serial.println(IP);
-
-  // Serial.println("\nMemulai hotspot konfigurasi WiFi.");
-  // WiFi.softAP(AP_SSID, AP_PASSWORD);
-  // IPAddress IP = WiFi.softAPIP();
-  // Serial.print("Alamat IP AP: ");
-  // Serial.println(IP);
 
   // Handle root endpoint
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
