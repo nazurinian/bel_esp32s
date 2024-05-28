@@ -105,10 +105,6 @@ void displayPlaybackInfo() {
   Serial.println(infoPilihanPutar);
   Serial.print("Info Putar Otomatis / Manual: ");
   Serial.println(infoPlay ? "true" : "false");
-
-  // Serial.print(" ----- SEDANG PUTAR YA GUYS: ");
-  // Serial.print(sedangMemutarAudio ? "true" : "false");
-  // Serial.println(" ----- ");
 }
 
 void handleAutomaticPlayback() {
