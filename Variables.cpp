@@ -2,7 +2,6 @@
 #include "Variables.h"
 
 LiquidCrystal_I2C LCD(0x27, 16, 2);
-// BluetoothSerial SerialBT;
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", GMT_OFFSET_SEC);

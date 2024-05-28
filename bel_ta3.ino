@@ -1,18 +1,7 @@
 
 #include <Arduino.h>
 #include "Libraries.h"
-#include "Config.h"
-#include "Structs.h"
-#include "Variables.h"
-#include "Monitors.h"
-#include "AudioManager.h"
-#include "FirebaseDataFetch.h"
-#include "BluetoothSerialControl.h"
-#include "WifiSetup.h"
-#include "FirebaseSetup.h"
-#include "FirebaseInitialSetup.h"
-#include "DFPlayerSetup.h"
-#include "CustomTimeUtils.h"
+#include "Local.h"
 
 void setup()
 {
@@ -112,12 +101,12 @@ bool checkSDStatus(int sdStatus) {
 void displayPlaybackInfo() {
   Serial.print("Info Pilihan Putar: ");
   Serial.println(infoPilihanPutar);
-  Serial.print("Info Putar Manual: ");
+  Serial.print("Info Putar Otomatis / Manual: ");
   Serial.println(infoPlay ? "true" : "false");
 
-  Serial.print(" ----- SEDANG PUTAR YA GUYS: ");
-  Serial.print(sedangMemutarAudio ? "true" : "false");
-  Serial.println(" ----- ");
+  // Serial.print(" ----- SEDANG PUTAR YA GUYS: ");
+  // Serial.print(sedangMemutarAudio ? "true" : "false");
+  // Serial.println(" ----- ");
 }
 
 void handleAutomaticPlayback() {
@@ -132,8 +121,6 @@ void handleAutomaticPlayback() {
       delay(100);
     }
   }
-
-  digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
 }
 
 void clearFirebaseStream() {
@@ -152,6 +139,8 @@ void loop() {
   stopAudioPlay(currentMillis);
 
   // Update setiap detik
+  digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
+
   if (currentMillis - previousMillisA >= interval) {
     previousMillisA = currentMillis;
     timeClient.update();
@@ -170,10 +159,13 @@ void loop() {
     cekPemutaranManualLebih1x(currentMillis);
 
     displayPlaybackInfo();
-    putarBelManual(infoPlay, infoPilihanPutar);
-    delay(100);
+    if (playState == 0)
+    {
+      handleAutomaticPlayback();
 
-    handleAutomaticPlayback();
+      putarBelManual(infoPlay, infoPilihanPutar);
+      delay(100);
+    }
 
     serialMonitor();
     lcdMonitor(1);

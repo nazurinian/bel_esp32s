@@ -9,7 +9,8 @@ void putarBelKelas(int pilihan)
     {
     case 1:
         // Bel Literasi Pagi
-        myDFPlayer.play(random(1, 39));
+        // myDFPlayer.play(random(1, 39));
+        myDFPlayer.play(13);
         break;
     case 2:
         // Bel Awal Masuk Pelajaran
@@ -19,18 +20,22 @@ void putarBelKelas(int pilihan)
         break;
     case 3:
         // Bel Pertengahan Pelajaran
-        myDFPlayer.play(random(1, 39));
+        // myDFPlayer.play(random(1, 39));
+        myDFPlayer.play(33);
         break;
     case 4:
         // Audio 5 Menit Sebelum Bel
-        myDFPlayer.play(random(1, 39));
+        // myDFPlayer.play(random(1, 39));
+        myDFPlayer.play(12);
         break;
     case 5:
         // Bel Istirahat
-        myDFPlayer.play(random(1, 39));
+        // myDFPlayer.play(random(1, 39));
+        myDFPlayer.play(15);
         break;
     case 6:
         // Bel Pulang
+        // myDFPlayer.play(35);
         myDFPlayer.play(35);
         break;
     default:
@@ -59,85 +64,81 @@ void cekWaktu(JadwalData masuk, int jamKe)
     // syaratnya ada dua, 1. Syaratnya kalau isPlayed = true dan menitbel atau 
     // menit 5 menit sblm msk itu tidak sama dengan menit saat ini
 
-    if (sedangMemutarAudio && (waktu5MenitSebelumMasuk.minutes != currentTime.minutes || masuk.menit != currentTime.minutes))
+    if ((waktu5MenitSebelumMasuk.minutes != currentTime.minutes || masuk.menit != currentTime.minutes) && sedangMemutarAudio)
     {
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
+        {
+            delay(100);
+            return;
+        }
+        Serial.println("Bel selesai diputar");
         sedangMemutarAudio = false;
-        return;
-    }
-    
-
-    // Memutar sound 5 menit sebelum masuk kelas
-    if (currentTime.hours == waktu5MenitSebelumMasuk.hours && currentTime.minutes == waktu5MenitSebelumMasuk.minutes && masuk.aktif && !sedangMemutarAudio)
-    {
-        if (jamKe == 1)
-        {
-            sedangMemutarAudio = true;
-            Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
-            Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
-            putarBelKelas(4);
-            return;
-        }
-        if (jamKe == 2 || jamKe == 7 || jamKe == 14)
-        {
-            sedangMemutarAudio = true;
-            Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
-            Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
-            putarBelKelas(4);
-            return;
-        }
-    }
-
-    if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif && !sedangMemutarAudio)
-    {
-        sedangMemutarAudio = true;
-        if (jamKe == 1)
-        {
-            Serial.println("Memutar Bel Pulang");
-            putarBelKelas(1);
-        }
-        else if (jamKe == 6 || jamKe == 13)
-        { // Waktu Mulai Istirahat (Bel putar 2x panjang)
-            Serial.println("Memutar Bel Istirahat");
-            putarBelKelas(5);
-        }
-        else if (jamKe == 16)
-        { // Waktu Mulai Istirahat (Bel putar 3x panjang)
-            Serial.println("Memutar Bel Pulang");
-            putarBelKelas(6);
-        }
-        else
-        {
-            Serial.println("Memutar Bel Masuk Jam ke-" + String(jamKe));
-            if (jamKe == 2 || jamKe == 7 || jamKe == 14)
-            {
-                putarBelKelas(2);
-            }
-            else
-            {
-                putarBelKelas(3);
-            }
-        }
-        Serial.println("Jadwal : " + String(masuk.jam) + "." + String(masuk.menit));
-    }
-}
-
-void putarBelOtomatis(JsonDocument &json)
-{
-    if (!digitalRead(DFPLAYER_BUSY_PIN))
-    {
+        setBelKelasTrue(false, 0);
         delay(100);
         return;
     }
-
-    for (int i = 1; i < json.size(); i++)
+    else
     {
-        JadwalData jadwalMasuk;
+        // Memutar sound 5 menit sebelum masuk kelas
+        if (currentTime.hours == waktu5MenitSebelumMasuk.hours && currentTime.minutes == waktu5MenitSebelumMasuk.minutes && masuk.aktif && !sedangMemutarAudio)
+        {
+            if (jamKe == 1)
+            {
+                sedangMemutarAudio = true;
+                Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
+                Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
+                putarBelKelas(4);
+                delay(400);
+                return;
+            }
+            if (jamKe == 2 || jamKe == 7 || jamKe == 14)
+            {
+                sedangMemutarAudio = true;
+                Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
+                Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
+                putarBelKelas(4);
+                delay(400);
+                return;
+            }
+        }
 
-        jadwalMasuk.aktif = json[i]["aktif"].as<bool>();
-        jadwalMasuk.jam = json[i]["jam"].as<int>();
-        jadwalMasuk.menit = json[i]["menit"].as<int>();
-
-        cekWaktu(jadwalMasuk, i);
+        if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif && !sedangMemutarAudio)
+        {
+            sedangMemutarAudio = true;
+            if (jamKe == 1)
+            {
+                Serial.println("Memutar Bel Pulang");
+                putarBelKelas(1);
+                delay(400);
+            }
+            else if (jamKe == 6 || jamKe == 13)
+            { // Waktu Mulai Istirahat (Bel putar 2x panjang)
+                Serial.println("Memutar Bel Istirahat");
+                putarBelKelas(5);
+                delay(400);
+            }
+            else if (jamKe == 16)
+            { // Waktu Mulai Istirahat (Bel putar 3x panjang)
+                Serial.println("Memutar Bel Pulang");
+                putarBelKelas(6);
+                delay(400);
+            }
+            else
+            {
+                Serial.println("Memutar Bel Masuk Jam ke-" + String(jamKe));
+                if (jamKe == 2 || jamKe == 7 || jamKe == 14)
+                {
+                    putarBelKelas(2);
+                    delay(400);
+                }
+                else
+                {
+                    putarBelKelas(3);
+                    delay(400);
+                }
+            }
+            Serial.println("Jadwal : " + String(masuk.jam) + "." + String(masuk.menit));
+        }
     }
 }
 
@@ -149,30 +150,70 @@ void cekPemutaranManualLebih1x(long currentMillis)
         break;
 
     case 1:
-        if (currentMillis - previousLoopCheck >= intervalCheck)
+        // if (currentMillis - previousLoopCheck >= intervalCheck)
+        // {
+        //     previousLoopCheck = currentMillis;
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
         {
-            previousLoopCheck = currentMillis;
-            if (digitalRead(DFPLAYER_BUSY_PIN))
-            {
-                playState = 2;
-                sedangMemutarAudio = true;
-            }
+            delay(100);
+            return;
         }
+        playState = 2;
+        sedangMemutarAudio = true;
+        // }
         break;
 
     case 2:
-        myDFPlayer.play(13);
-        sedangMemutarAudio = true;
         playState = 3;
+        sedangMemutarAudio = true;
+        myDFPlayer.play(33);
         break;
 
     case 3:
-        if (digitalRead(DFPLAYER_BUSY_PIN))
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
         {
-            sedangMemutarAudio = false;
-            setBelKelasTrue(false, 0);
+            delay(100);
+            return;
         }
+        playState = 0;
+        Serial.println("Bel selesai diputar");
+        sedangMemutarAudio = false;
+        setBelKelasTrue(false, 0);
         break;
+    }
+}
+
+void putarBelOtomatis(JsonDocument &json)
+{
+    if (!digitalRead(DFPLAYER_BUSY_PIN))
+    {
+        delay(100);
+        return;
+    }
+
+    // if (playState > 0)
+    // {
+    //     return;
+    // }
+
+    // if (sedangMemutarAudio)
+    // {
+    //     Serial.println("Bel selesai diputar");
+    //     sedangMemutarAudio = false;
+    //     setBelKelasTrue(false, 0);
+    //     delay(100);
+    //     return;
+    // }
+
+    for (int i = 1; i < json.size(); i++)
+    {
+        JadwalData jadwalMasuk;
+
+        jadwalMasuk.aktif = json[i]["aktif"].as<bool>();
+        jadwalMasuk.jam = json[i]["jam"].as<int>();
+        jadwalMasuk.menit = json[i]["menit"].as<int>();
+
+        cekWaktu(jadwalMasuk, i);
     }
 }
 
@@ -194,22 +235,20 @@ void putarBelManual(bool mainkan, int choice)
         return;
     }
 
-    if (playState > 0)
-    {
-        return;
-    }
+    // if (playState > 0)
+    // {
+    //     return;
+    // }
 
-    if (sedangMemutarAudio)
-    {
-        // sedangMemutarAudio = false;
-        Serial.println("Bel selesai diputar");
-        setBelKelasTrue(false, 0);
-        delay(100);
-        return;
-    }
-    
+    // if (sedangMemutarAudio)
+    // {
+    //     Serial.println("Bel selesai diputar");
+    //     setBelKelasTrue(false, 0);
+    //     delay(100);
+    //     return;
+    // }    
 
-    if (mainkan)
+    if (mainkan && !sedangMemutarAudio)
     {
         Serial.println("Memutar bel secara manual");
         putarBelKelas(choice);

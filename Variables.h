@@ -10,7 +10,6 @@
 #include "Structs.h"
 
 extern LiquidCrystal_I2C LCD;
-// extern BluetoothSerial SerialBT;
 
 extern WiFiUDP ntpUDP;
 extern NTPClient timeClient;
