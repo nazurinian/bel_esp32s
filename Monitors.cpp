@@ -164,12 +164,12 @@ void serialMonitor()
         now = "Hari Libur";
         next = "Hari Senin";
     }
-
-    Serial.println("Jadwal bel saat ini : " + now);
-    Serial.println("Jadwal bel yang akan datang : " + next);
-
     // Mendapatkan waktu saat ini
     String formattedTime = timeClient.getFormattedTime();
     Serial.print("Time : ");
     Serial.println(formattedTime);
+
+    Serial.println("Jadwal bel saat ini : " + now);
+    Serial.println("Jadwal bel yang akan datang : " + next);
+
 }

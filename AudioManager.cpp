@@ -157,7 +157,6 @@ void cekPemutaranManualLebih1x()
         }
         playState = 2;
         sedangMemutarAudio = true;
-        // }
         break;
 
     case 2:

@@ -175,6 +175,14 @@ void loop() {
     cekPemutaranManualLebih1x();
   }
 
+  // check setiap 1 menit
+  if (currentMillis - previousLoopCheck >= intervalCheck)
+  {
+    previousLoopCheck = currentMillis;
+    digitalWrite(LED_2_RED_PIN, sedangMemutarAudio ? HIGH : LOW);
+    cekPemutaranManualLebih1x();
+  }
+
   // Update setiap 10 detik
   if (currentMillis - previousMillisB >= (interval * 10)) {
     if (WiFi.status() != WL_CONNECTED || !internetAvailable)
