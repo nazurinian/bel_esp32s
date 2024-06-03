@@ -127,7 +127,7 @@ void lcdMonitor(int type, int error)
             LCD.setCursor(0, 0);
             LCD.print("Bel Sekolah By");
             LCD.setCursor(0, 1);
-            LCD.print("Abdullah Hikam");
+            LCD.print("Hikam Saif");
             break;
 
         default:
