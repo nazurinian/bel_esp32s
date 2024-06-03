@@ -32,7 +32,7 @@ void putarBelKelas(int pilihan)
         break;
     case 4:
         // Audio 5 Menit Sebelum Bel | Qur'an / Hadis
-        myDFPlayer.play(random(5, 10)); // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
+        myDFPlayer.play(random(5, 13)); // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
         delay(500);
         break;
     case 5:

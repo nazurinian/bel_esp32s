@@ -20,6 +20,9 @@ void setupDFPlayer()
     delay(1000);
   }
 
+  LCD.clear();
+  lcdMonitor(0, 5);
+
   Serial.println(F("DFPlayer Mini online."));
 
   myDFPlayer.volume(30);             // Set volume level (0-30)
