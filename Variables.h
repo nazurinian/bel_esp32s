@@ -79,5 +79,6 @@ extern int infoPilihanPutar;
 extern bool infoPlay;
 extern bool isPlaying;
 extern int menitPutar;
+extern int jumlahPutar;
 
 #endif

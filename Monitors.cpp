@@ -122,6 +122,13 @@ void lcdMonitor(int type, int error)
             LCD.setCursor(0, 1);
             LCD.print("Masukan MicroSD");
             break;
+        case 5:
+            Serial.println("Menyiapkan Alat...\n");
+            LCD.setCursor(0, 0);
+            LCD.print("Bel Sekolah By");
+            LCD.setCursor(0, 1);
+            LCD.print("Abdullah Hikam");
+            break;
 
         default:
             LCD.setCursor(0, 0);

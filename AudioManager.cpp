@@ -10,30 +10,44 @@ void putarBelKelas(int pilihan)
     switch (pilihan)
     {
     case 1:
-        // Bel Literasi Pagi
-        // myDFPlayer.play(random(1, 41));
-        myDFPlayer.play(13);
+        // Bel Literasi Pagi | 3x
+        myDFPlayer.play(3);
+        delay(500);
+        // playState = 1;
+        // jumlahPutar = 3;
         break;
     case 2:
-        // Bel Awal Masuk Pelajaran
-        // Putar 2x panjang
-        playState = 1;
+        // Bel Awal Masuk Pelajaran | 3x
+        myDFPlayer.play(3);
+        delay(500);
+        // playState = 1;
+        // jumlahPutar = 3;
         break;
     case 3:
-        // Bel Pertengahan Pelajaran
-        myDFPlayer.play(33);
+        // Bel Pertengahan Pelajaran | 1x
+        myDFPlayer.play(1);
+        delay(500);
+        // playState = 1;
+        // jumlahPutar = 1;
         break;
     case 4:
-        // Audio 5 Menit Sebelum Bel
-        myDFPlayer.play(random(1, 41));
+        // Audio 5 Menit Sebelum Bel | Qur'an / Hadis
+        myDFPlayer.play(random(5, 10)); // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
+        delay(500);
         break;
     case 5:
-        // Bel Istirahat
-        myDFPlayer.play(15);
+        // Bel Istirahat | 2x
+        myDFPlayer.play(2);
+        delay(500);
+        // playState = 1;
+        // jumlahPutar = 2;
         break;
     case 6:
-        // Bel Pulang
-        myDFPlayer.play(35);
+        // Bel Pulang | 4x
+        myDFPlayer.play(4);
+        delay(500);
+        // playState = 1;
+        // jumlahPutar = 4;
         break;
     default:
         Serial.println("Tidak memutar apa-apa karena pilihan putar yang dipilih adalah 0");
@@ -110,20 +124,20 @@ void cekWaktu(JadwalData masuk, int jamKe)
     }
 }
 
-void cekPemutaranManualLebih1x()
+void cekJumlahPemutaran()
 {
     switch (playState)
     {
     case 0:
         break;
 
-    case 1:
+    case 1: // Putar Ke-1
         playState = 2;
         sedangMemutarAudio = true;
-        myDFPlayer.play(12);
+        myDFPlayer.play(1);
         break;
 
-    case 2:
+    case 2: // Putar Ke-2
         if (!digitalRead(DFPLAYER_BUSY_PIN))
         {
             delay(100);
@@ -131,16 +145,71 @@ void cekPemutaranManualLebih1x()
         }
         playState = 3;
         sedangMemutarAudio = true;
-        myDFPlayer.play(11);
+        myDFPlayer.play(1);
         break;
 
-    case 3:
+    case 3: // Putar Ke-3 atau Stop 2
         if (!digitalRead(DFPLAYER_BUSY_PIN))
         {
             delay(100);
             return;
         }
 
+        playState = (jumlahPutar >= 3) ? 4 : 0;
+        delay(100);
+        if (playState == 0)
+        {
+            setBelKelasTrue(false, 0);
+            delay(500);
+            if (!infoPlay)
+            {
+                playState = 0;
+                sedangMemutarAudio = false;
+                isPlaying = false;
+                Serial.println("Bel selesai diputar");
+            }
+        }
+        else if (playState == 4)
+        {
+            sedangMemutarAudio = true;
+            myDFPlayer.play(1);
+        }
+        break;
+
+    case 4: // Putar Ke- 4 atau Stop 3
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
+        {
+            delay(100);
+            return;
+        }
+
+        playState = (jumlahPutar == 4) ? 5 : 0;
+        delay(100);
+        if (playState == 0)
+        {
+            setBelKelasTrue(false, 0);
+            delay(500);
+            if (!infoPlay)
+            {
+                playState = 0;
+                sedangMemutarAudio = false;
+                isPlaying = false;
+                Serial.println("Bel selesai diputar");
+            }
+        }
+        else if (playState == 5)
+        {
+            sedangMemutarAudio = true;
+            myDFPlayer.play(1);
+        }
+        break;
+
+    case 5: // Stop 4
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
+        {
+            delay(100);
+            return;
+        }
         setBelKelasTrue(false, 0);
         delay(500);
         if (!infoPlay)
@@ -150,8 +219,6 @@ void cekPemutaranManualLebih1x()
             isPlaying = false;
             Serial.println("Bel selesai diputar");
         }
-        return;
-
         break;
     }
 }

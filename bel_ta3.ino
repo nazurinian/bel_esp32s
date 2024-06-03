@@ -14,6 +14,7 @@ void setup()
   LCD.backlight();
   LCD.home();
   delay(100); // DELAY SETUP 2
+  lcdMonitor(0, 5);
 
   // DFPlayer Setup
   setupDFPlayer();
@@ -22,6 +23,8 @@ void setup()
   // WiFi Setup -> NTPSetup Setup && Firebase Setup
   wifiSetup();
   delay(100); // DELAY SETUP 5
+
+  LCD.clear();
 
   // IO Setup
   pinMode(BUTTON_1_PIN, INPUT_PULLUP); // Bluetooth
@@ -202,7 +205,7 @@ void loop()
   {
     previousLoopCheck = currentMillis;
     digitalWrite(LED_2_RED_PIN, isPlaying ? HIGH : LOW);
-    cekPemutaranManualLebih1x();
+    cekJumlahPemutaran();
   }
 
   // Update setiap 10 detik
