@@ -5,6 +5,7 @@ void putarBelKelas(int pilihan)
     sedangMemutarAudio = true;
     isPlaying = true;
     menitPutar = currentTime.minutes;
+    digitalWrite(LED_2_RED_PIN, HIGH);
     setBelKelasTrue(true, pilihan);
 
     switch (pilihan)
