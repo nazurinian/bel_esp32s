@@ -191,7 +191,12 @@ void loop()
     if (playState == 0)
     {
       handleAutomaticPlayback();
-      putarBelManual(infoPlay, infoPilihanPutar);
+      if (!mulaiPutarOnline)
+      {
+        putarBelManual(infoPlay, infoPilihanPutar);
+      } else {
+        mulaiPutarOnline = false;
+      }
 
       delay(100);
     }

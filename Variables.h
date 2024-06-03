@@ -80,5 +80,6 @@ extern bool infoPlay;
 extern bool isPlaying;
 extern int menitPutar;
 extern int jumlahPutar;
+extern bool mulaiPutarOnline;
 
 #endif

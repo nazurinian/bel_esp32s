@@ -143,3 +143,4 @@ bool infoPlay;
 bool isPlaying = false;
 int menitPutar = 0;
 int jumlahPutar = 0;
+bool mulaiPutarOnline = false;

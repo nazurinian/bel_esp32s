@@ -79,6 +79,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
             Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
+            mulaiPutarOnline = true;
             return;
         }
         if (jamKe == 2 || jamKe == 7 || jamKe == 14)
@@ -87,6 +88,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
             Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
+            mulaiPutarOnline = true;
             return;
         }
     }
@@ -94,6 +96,7 @@ void cekWaktu(JadwalData masuk, int jamKe)
     if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif && !sedangMemutarAudio)
     {
         // sedangMemutarAudio = true;
+        mulaiPutarOnline = true;
         if (jamKe == 1)
         {
             Serial.println("Memutar Bel Pulang");
