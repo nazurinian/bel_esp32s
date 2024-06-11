@@ -76,7 +76,8 @@ void lcdMonitor(int type, int error)
         // 1. Masalah belum terhubung wifi
         // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
-        // 4. Masalah koneksi DFPlayer di awal setup
+        // 4. Masalah koneksi DFPlayer (koneksi dan microsd)
+        // 5. Menyiapkan Alat... diawal Setup
         if (displayTime)
         {
             displayNextSchedule = true;
