@@ -2,9 +2,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define BUTTON_1_PIN 14        // Tombol 1 (Pin 14) (Bluetooth)
-#define BUTTON_2_PIN 27        // Tombol 2 (Pin 27) (WiFi Manager)
-#define BUTTON_3_PIN 26        // Tombol 3 (Pin 26) (Stop Audio)
+#define BUTTON_1_PIN 14        // Tombol 1 (Pin 14) (WiFi Manager)
+#define BUTTON_2_PIN 27        // Tombol 2 (Pin 27) (Stop Audio)
+#define BUTTON_3_PIN 26        // -
 #define LED_PIN 2              // Lampu LED (Pin 2, default untuk ESP32)
 #define LED_1_GREEN_PIN 12     // LED Hijau 1 (Pin 12)
 #define LED_2_RED_PIN 13       // LED Merah 2 (Pin 13)
