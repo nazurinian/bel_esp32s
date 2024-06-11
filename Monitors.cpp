@@ -73,7 +73,7 @@ void lcdMonitor(int type, int error)
     else
     {
         // Daftar pilihan waktu offline di lcdMonitor 0 / tidak aktif
-        // 1. Masalah belum terhubung wifi
+        // 1. Masalah belum/tidak terhubung wifi
         // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
         // 4. Masalah koneksi DFPlayer (koneksi dan microsd)
