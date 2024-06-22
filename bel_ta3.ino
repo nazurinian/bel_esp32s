@@ -187,6 +187,7 @@ void loop()
     if (checkSDStatus(sdStatus))
       return;
 
+    cekJumlahPemutaran();
     displayPlaybackInfo();
     if (playState == 0)
     {
@@ -194,10 +195,8 @@ void loop()
       if (!mulaiPutarOnline)
       {
         putarBelManual(infoPlay, infoPilihanPutar);
-      } else {
-        mulaiPutarOnline = false;
       }
-
+      
       delay(100);
     }
 
@@ -210,7 +209,6 @@ void loop()
   {
     previousLoopCheck = currentMillis;
     digitalWrite(LED_2_RED_PIN, isPlaying ? HIGH : LOW);
-    cekJumlahPemutaran();
   }
 
   // Update setiap 10 detik

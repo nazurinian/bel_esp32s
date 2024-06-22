@@ -33,7 +33,9 @@ void putarBelKelas(int pilihan)
         break;
     case 4:
         // Audio 5 Menit Sebelum Bel | Qur'an / Hadis
-        myDFPlayer.play(random(5, 13)); // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
+        // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
+        // Play 8 random audios from 9 to 16
+        myDFPlayer.play(random(9, 17)); // Random audio from 6 to 16 (inclusive)
         delay(500);
         break;
     case 5:
@@ -47,11 +49,16 @@ void putarBelKelas(int pilihan)
         // Bel Pulang | 4x
         myDFPlayer.play(4);
         delay(500);
-        // playState = 1;
+        playState = 1;
         // jumlahPutar = 4;
         break;
+    case 7:
+        // Alarm Keadaan Darurat
+        myDFPlayer.play(5);
+        delay(500);
+        break;
     default:
-        Serial.println("Tidak memutar apa-apa karena pilihan putar yang dipilih adalah 0");
+        Serial.println("Tidak memutar apa-apa karena tidak ada pilihan putar yang dipilih");
         break;
     }
 }
@@ -75,7 +82,6 @@ void cekWaktu(JadwalData masuk, int jamKe)
     {
         if (jamKe == 1)
         {
-            // sedangMemutarAudio = true;
             Serial.println("Memutar Sound 5 menit sebelum Literasi Pagi");
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
@@ -84,7 +90,6 @@ void cekWaktu(JadwalData masuk, int jamKe)
         }
         if (jamKe == 2 || jamKe == 7 || jamKe == 14)
         {
-            // sedangMemutarAudio = true;
             Serial.println("Memutar Sound 5 menit sebelum masuk Jam ke-" + String(jamKe));
             Serial.println("Jadwal : " + String(waktu5MenitSebelumMasuk.hours) + "." + String(waktu5MenitSebelumMasuk.minutes));
             putarBelKelas(4);
@@ -95,7 +100,6 @@ void cekWaktu(JadwalData masuk, int jamKe)
 
     if (currentTime.hours == masuk.jam && currentTime.minutes == masuk.menit && masuk.aktif && !sedangMemutarAudio)
     {
-        // sedangMemutarAudio = true;
         mulaiPutarOnline = true;
         if (jamKe == 1)
         {
@@ -129,6 +133,29 @@ void cekWaktu(JadwalData masuk, int jamKe)
 }
 
 void cekJumlahPemutaran()
+{
+    switch (playState)
+    {
+    case 0:
+        break;
+
+    case 1: // Putar Ke-2
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
+        {
+            delay(100);
+            return;
+        }
+        delay(100);
+
+        // Play 3 random audios from 6 to 8 (Do'a)
+        myDFPlayer.play(random(6, 9));
+        playState = 0;
+        delay(500);
+        break;
+    }
+}
+
+/* void cekJumlahPemutaran()
 {
     switch (playState)
     {
@@ -170,6 +197,7 @@ void cekJumlahPemutaran()
                 playState = 0;
                 sedangMemutarAudio = false;
                 isPlaying = false;
+                mulaiPutarOnline = false;
                 Serial.println("Bel selesai diputar");
             }
         }
@@ -198,6 +226,7 @@ void cekJumlahPemutaran()
                 playState = 0;
                 sedangMemutarAudio = false;
                 isPlaying = false;
+                mulaiPutarOnline = false;
                 Serial.println("Bel selesai diputar");
             }
         }
@@ -221,11 +250,12 @@ void cekJumlahPemutaran()
             playState = 0;
             sedangMemutarAudio = false;
             isPlaying = false;
+            mulaiPutarOnline = false;
             Serial.println("Bel selesai diputar");
         }
         break;
     }
-}
+} */
 
 void putarBelOtomatis(JsonDocument &json)
 {
@@ -250,6 +280,7 @@ void putarBelOtomatis(JsonDocument &json)
             {
                 sedangMemutarAudio = false;
                 isPlaying = false;
+                mulaiPutarOnline = false;
                 Serial.println("Bel selesai diputar");
             }
             return;
@@ -277,6 +308,7 @@ void putarBelManual(bool mainkan, int choice)
             Serial.println("Menghentikan pemutaran audio");
             sedangMemutarAudio = false;
             isPlaying = false;
+            mulaiPutarOnline = false;
             playState = 0;
             myDFPlayer.stop();
             return;
@@ -302,6 +334,7 @@ void putarBelManual(bool mainkan, int choice)
             {
                 sedangMemutarAudio = false;
                 isPlaying = false;
+                mulaiPutarOnline = false;
                 Serial.println("Bel selesai diputar");
             }
             return;
@@ -339,6 +372,7 @@ void stopAudioPlay(long currentMillis)
                 {
                     sedangMemutarAudio = false;
                     isPlaying = false;
+                    mulaiPutarOnline = false;
                     Serial.println("Menghentikan pemutaran audio");
                     myDFPlayer.stop();
                     delay(100);
@@ -352,3 +386,42 @@ void stopAudioPlay(long currentMillis)
         }
     }
 }
+
+/* void playRandomAudios()
+{
+    int firstSet[3];
+    int secondSet[8];
+    int used[11] = {0}; // Array to keep track of used audio indexes (6-16 inclusive)
+
+    // Select 3 random audios from 6 to 13
+    for (int i = 0; i < 3; i++)
+    {
+        int randomAudio;
+        do
+        {
+            randomAudio = random(6, 14); // Random audio from 6 to 13 (inclusive)
+        } while (used[randomAudio - 6]); // Ensure it hasn't been used
+        firstSet[i] = randomAudio;
+        used[randomAudio - 6] = 1; // Mark it as used
+        Serial.print(F("First set, playing audio: "));
+        Serial.println(randomAudio);
+        myDFPlayer.play(randomAudio);
+        delay(3000); // Adjust delay based on your audio length
+    }
+
+    // Select 8 random audios from 6 to 16, excluding already selected ones
+    for (int i = 0; i < 8; i++)
+    {
+        int randomAudio;
+        do
+        {
+            randomAudio = random(6, 17); // Random audio from 6 to 16 (inclusive)
+        } while (used[randomAudio - 6]); // Ensure it hasn't been used
+        secondSet[i] = randomAudio;
+        used[randomAudio - 6] = 1; // Mark it as used
+        Serial.print(F("Second set, playing audio: "));
+        Serial.println(randomAudio);
+        myDFPlayer.play(randomAudio);
+        delay(3000); // Adjust delay based on your audio length
+    }
+} */

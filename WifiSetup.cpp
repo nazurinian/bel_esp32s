@@ -215,12 +215,19 @@ void startConfigServer()
         return;
       }
 
-      putarBelManual(true, bellChoice); 
+      if (!sedangMemutarAudio)
+      {
+        putarBelManual(true, bellChoice);
+      } else
+      {
+        request->send(400, "text/plain", "Gagal memutar Bel/Audio karena adanya pemutaran lain yang sedang berlangsung");
+        return;
+      }
 
-      request->send(200, "text/plain", "Memutar Bel pilihan ke-" + String(bellChoice));
+      request->send(200, "text/plain", "Memutar Bel/Audio pilihan ke-" + String(bellChoice));
       delay(1000);
     } else {
-      request->send(400, "text/plain", "Gagal memutar bel");
+      request->send(400, "text/plain", "Gagal memutar Bel/Audio");
     } });
 
   server.on("/hentikan-bel", HTTP_GET, [](AsyncWebServerRequest *request)
