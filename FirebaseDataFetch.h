@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include "FirebaseSetup.h"
 #include "Functions.h"
 #include "Config.h"
 #include "CustomTimeUtils.h"

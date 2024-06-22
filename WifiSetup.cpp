@@ -39,26 +39,33 @@ void saveCredentials(const String &newSSID, const String &newPassword)
 }
 
 // Fungsi untuk mengecek koneksi internet dengan ping
-void checkInternetConnection(bool onSetup) {
-  if (Ping.ping("www.google.com")) {
-      Serial.println("Ping successful");
-      Serial.println("Sistem telah tersambung ke internet");
-      internetAvailable = true;
-      dataFetched = true;
-      startWifiConfig = false;
+void checkInternetConnection(bool onSetup)
+{
+  if (Ping.ping("www.google.com"))
+  {
+    Serial.println("Ping successful");
+    Serial.println("Sistem telah tersambung ke internet");
+    internetAvailable = true;
+    dataFetched = true;
+    startWifiConfig = false;
 
-      if(onSetup) {
-        ntpSetup();
-        delay(100);
-        firebaseSetup();
-      } else {
-        timeClient.forceUpdate();
-      }
-  } else {
-      Serial.println("Ping failed");
-      Serial.println("Sistem tidak terhubung internet saat ini");
-      internetAvailable = false;
-      dataFetched = false;
+    if (onSetup)
+    {
+      ntpSetup();
+      delay(100);
+      firebaseSetup();
+    }
+    else
+    {
+      timeClient.forceUpdate();
+    }
+  }
+  else
+  {
+    Serial.println("Ping failed");
+    Serial.println("Sistem tidak terhubung internet saat ini");
+    internetAvailable = false;
+    dataFetched = false;
   }
 }
 
@@ -71,39 +78,26 @@ void wifiSetup()
   Serial.println(readSSID().c_str());
 
   // Coba koneksi ke WiFi dengan SSID dan password default
-  if (WiFi.status() != WL_CONNECTED) {
+  if (WiFi.status() != WL_CONNECTED)
+  {
     WiFi.begin(readSSID().c_str(), readPassword().c_str());
   }
-  
+
   int attempt = 0;
-  // while (WiFi.status() != WL_CONNECTED && attempt < 10 && internetAvailable)
-  // {
-  //   if (attempt == 9)
-  //   {
-  //     internetAvailable = false;
-  //   }
-    
-  //   delay(500);
-  //   Serial.print(".");
-  //   attempt++;
-  // }
   while (WiFi.status() != WL_CONNECTED && attempt < 10)
-  {    
+  {
     delay(500);
     Serial.print(".");
     attempt++;
   }
-
-  // Menonaktifkan Bluetooth
-  // btStatus = false;
-  // startWifiConfig = false;
 
   // Jika koneksi gagal, aktifkan mode server konfigurasi dengan mengganti status hotspot ke True
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.println("\nGagal terhubung ke WiFi menggunakan SSID dan password default.");
 
-    if (!hotspotStatus && !startWifiConfig) {
+    if (!hotspotStatus && !startWifiConfig)
+    {
       startConfigServer();
       startWifiConfig = true;
       hotspotStatus = true;
@@ -122,81 +116,35 @@ void wifiSetup()
 
     digitalWrite(LED_1_GREEN_PIN, LOW);
     delay(100);
-    
+
     checkInternetConnection(true);
   }
 
   delay(100);
 }
 
-// void startConfigServer()
-// {
-//   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
-
-//   if (AP_PASSWORD == "")
-//   {
-//     WiFi.softAP(AP_SSID);
-//   }
-//   else
-//   {
-//     WiFi.softAP(AP_SSID, AP_PASSWORD);
-//   }
-
-//   IPAddress IP = WiFi.softAPIP();
-//   Serial.print("Alamat IP AP: ");
-//   Serial.println(IP);
-
-//   // Menentukan handle untuk root endpoint ("/")
-//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-//             {
-//     // Membaca isi file HTML dari SPIFFS dan mengirimkannya sebagai respons
-//     File file = SPIFFS.open("/index.html", "r");
-//     if (file) {
-//       request->send(SPIFFS,  "/index.html", "text/html", false);
-//     } else {
-//       request->send(404, "text/plain", "Halaman tidak ditemukan.");
-//     } });
-
-//   // Menentukan handle untuk endpoint "/set-credentials"
-//   server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request)
-//             {
-//     // Mendapatkan SSID dan password dari formulir yang disubmit
-//     String newSSID = request->arg("ssid");
-//     String newPassword = request->arg("password");
-
-//     // Menyimpan SSID dan password ke dalam file SPIFFS
-//     saveCredentials(newSSID, newPassword);
-
-//     // Mengirim respons bahwa perubahan berhasil
-//     request->send(200, "text/plain", "SSID dan password berhasil diperbarui. Perangkat akan direstart.");
-//     delay(1000);
-
-//     // Merestart perangkat setelah merubah konfigurasi
-//     ESP.restart(); });
-
-//   // Memulai server web
-//   server.begin();
-// }
-
 // Fungsi untuk memutar bel
-void putarBelKelasWiFi(int pilihan) {
+void putarBelKelasWiFi(int pilihan)
+{
   // Implementasi pemutaran bel sesuai pilihan
   Serial.printf("Memutar bel nomor %d\n", pilihan);
 }
 
-void startConfigServer() {
+void startConfigServer()
+{
   // Pengaturan jaringan untuk hotspot
-  IPAddress local_IP(10, 0, 0, 1);        // Alamat IP yang ingin kamu tetapkan untuk hotspot
-  IPAddress gateway(10, 0, 0, 1);         // Alamat IP gateway (biasanya sama dengan alamat IP hotspot)
-  IPAddress subnet(255, 255, 255, 0);     // Subnet mask
+  IPAddress local_IP(10, 0, 0, 1);    // Alamat IP yang ingin kamu tetapkan untuk hotspot
+  IPAddress gateway(10, 0, 0, 1);     // Alamat IP gateway (biasanya sama dengan alamat IP hotspot)
+  IPAddress subnet(255, 255, 255, 0); // Subnet mask
 
   Serial.println("\nMemulai hotspot konfigurasi WiFi.");
 
   // Mengonfigurasi IP statis untuk hotspot
-  if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
+  if (!WiFi.softAPConfig(local_IP, gateway, subnet))
+  {
     Serial.println("Gagal mengonfigurasi IP statis untuk hotspot");
   }
-  
+
   if (AP_PASSWORD == "")
   {
     WiFi.softAP(AP_SSID);
@@ -210,51 +158,43 @@ void startConfigServer() {
   Serial.print("Alamat IP AP: ");
   Serial.println(IP);
 
-  // Serial.println("\nMemulai hotspot konfigurasi WiFi.");
-  // WiFi.softAP(AP_SSID, AP_PASSWORD);
-  // IPAddress IP = WiFi.softAPIP();
-  // Serial.print("Alamat IP AP: ");
-  // Serial.println(IP);
-
   // Handle root endpoint
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", "text/html");
-  });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/index.html", "text/html"); });
 
   // Handle untuk form reset WiFi
-  server.on("/reset-wifi", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/reset-wifi.html", "text/html");
-  });
+  server.on("/reset-wifi", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/reset-wifi.html", "text/html"); });
 
   // Handle untuk set-credentials
-  server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request){
+  server.on("/set-credentials", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     String newSSID = request->arg("ssid");
     String newPassword = request->arg("password");
     saveCredentials(newSSID, newPassword);
     request->send(200, "text/plain", "SSID dan password berhasil diperbarui. Perangkat akan direstart.");
     delay(1000);
-    ESP.restart();
-  });
+    ESP.restart(); });
 
-  server.on("/cek-ssid", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/cek-ssid", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     // Implementasikan pengecekan SSID
     String currentSSID = readSSID().c_str();  // Ganti dengan implementasi sebenarnya
-    request->send(200, "text/plain", "SSID saat ini: \n" + currentSSID);
-  });
+    request->send(200, "text/plain", "SSID saat ini: \n" + currentSSID); });
 
-  server.on("/cek-ip", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/cek-ip", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     // Implementasikan pengecekan IP
     IPAddress ip = WiFi.localIP();
-    request->send(200, "text/plain", "IP Address saat ini: \n" + ip.toString());
-  });
+    request->send(200, "text/plain", "IP Address saat ini: \n" + ip.toString()); });
 
   // Handle untuk halaman play bell
-  server.on("/putar-bel", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/putar-bel.html", "text/html");
-  });
+  server.on("/putar-bel", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/putar-bel.html", "text/html"); });
 
   // Handle untuk play bell
-  server.on("/selected-bell", HTTP_POST, [](AsyncWebServerRequest *request){
+  server.on("/selected-bell", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     if (request->hasArg("bell")) {
       int bellChoice = request->arg("bell").toInt();
       putarBelKelasWiFi(bellChoice);
@@ -275,16 +215,23 @@ void startConfigServer() {
         return;
       }
 
-      putarBelManual(true, bellChoice); 
+      if (!sedangMemutarAudio)
+      {
+        putarBelManual(true, bellChoice);
+      } else
+      {
+        request->send(400, "text/plain", "Gagal memutar Bel/Audio karena adanya pemutaran lain yang sedang berlangsung");
+        return;
+      }
 
-      request->send(200, "text/plain", "Memutar Bel pilihan ke-" + String(bellChoice));
+      request->send(200, "text/plain", "Memutar Bel/Audio pilihan ke-" + String(bellChoice));
       delay(1000);
     } else {
-      request->send(400, "text/plain", "Gagal memutar bel");
-    }
-  });
+      request->send(400, "text/plain", "Gagal memutar Bel/Audio");
+    } });
 
-  server.on("/hentikan-bel", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/hentikan-bel", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     // Implementasikan penghentian bel
     String message;
     if (!signupOK)
@@ -304,6 +251,8 @@ void startConfigServer() {
     if (!digitalRead(DFPLAYER_BUSY_PIN))
     {
       message = "Pemutaran bel dihentikan";
+      sedangMemutarAudio = false;
+      isPlaying = false;
       Serial.println(message);
       setBelKelasTrue(false, 0);
       myDFPlayer.stop();
@@ -314,10 +263,10 @@ void startConfigServer() {
       Serial.println(message);
     }
     
-    request->send(200, "text/plain", message);
-  });
- 
-  server.on("/restart-wifi", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", message); });
+
+  server.on("/restart-wifi", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     // Implementasikan restart WiFi
     Serial.println("\nMencoba menghubungkan perangkat dengan WiFi yang terdaftar ...");
     if (WiFi.status() == WL_CONNECTED)
@@ -327,42 +276,48 @@ void startConfigServer() {
       WiFi.disconnect(true);
       delay(2000);
     }
-    request->send(200, "text/plain", "Merestart WiFi sistem");
-  });
+    request->send(200, "text/plain", "Merestart WiFi sistem"); });
 
-  server.on("/restart-perangkat", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/restart-perangkat", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     // Implementasikan restart perangkat
     request->send(200, "text/plain", "Perangkat di-restart");
     delay(100);
-    ESP.restart();
-  });
+    ESP.restart(); });
 
   // Memulai server web
   server.begin();
 }
 
-void startHotspot(long currentMillis) {
-    button2State = digitalRead(BUTTON_1_PIN);
+void startHotspot(long currentMillis)
+{
+  button2State = digitalRead(BUTTON_1_PIN);
 
-    if (button2State == LOW && !button2WasPressed) {
-        button2WasPressed = true;
-        button2LastPressTime = currentMillis;  // Catat waktu saat tombol pertama kali ditekan
+  if (button2State == LOW && !button2WasPressed)
+  {
+    button2WasPressed = true;
+    button2LastPressTime = currentMillis; // Catat waktu saat tombol pertama kali ditekan
+  }
+
+  if (button2WasPressed && (currentMillis - button2LastPressTime >= debounceInterval))
+  {
+    // Jika tombol dilepas atau debounce interval telah berlalu
+    if (digitalRead(BUTTON_1_PIN) == HIGH)
+    {
+      button2WasPressed = false;
+
+      hotspotStatus = !hotspotStatus;
+      digitalWrite(LED_1_GREEN_PIN, hotspotStatus ? HIGH : LOW);
+
+      if (hotspotStatus)
+      {
+        startConfigServer();
+      }
+      else
+      {
+        Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
+        WiFi.softAPdisconnect(true);
+      }
     }
-
-    if (button2WasPressed && (currentMillis - button2LastPressTime >= debounceInterval)) {
-        // Jika tombol dilepas atau debounce interval telah berlalu
-        if (digitalRead(BUTTON_1_PIN) == HIGH) {
-            button2WasPressed = false;
-
-            hotspotStatus = !hotspotStatus;
-            digitalWrite(LED_1_GREEN_PIN, hotspotStatus ? HIGH : LOW);
-
-            if (hotspotStatus) {
-                startConfigServer();
-            } else {
-                Serial.println("\nMenonaktifkan hotspot konfigurasi WiFi.");
-                WiFi.softAPdisconnect(true);
-            }
-        }
-    }
+  }
 }

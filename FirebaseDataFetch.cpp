@@ -1,7 +1,7 @@
 #include "FirebaseDataFetch.h"
 
 void fetchDataFromFirebase(String day)
-{ 
+{
     HTTPClient http;
 
     // Build Firebase URL
@@ -63,18 +63,21 @@ void getJsonData()
     }
 }
 
-void setBelKelasTrue(bool status, int bellChoice) {
-  FirebaseJson jsonUp;
-  if (status) {
-    jsonUp.add("putar",  true);
-    jsonUp.add("choice", bellChoice);
-    Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
-  } else {
-    jsonUp.add("putar",  false);
-    jsonUp.add("choice", bellChoice);
-    Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
-    // sedangMemutarAudio = false;
-    
-    playState = 0;
-  }
+void setBelKelasTrue(bool status, int bellChoice)
+{
+    FirebaseJson jsonUp;
+    if (status)
+    {
+        jsonUp.add("putar", true);
+        jsonUp.add("choice", bellChoice);
+        Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
+    }
+    else
+    {
+        jsonUp.add("putar", false);
+        jsonUp.add("choice", bellChoice);
+        Firebase.setJSON(fbdo, String(PUTAR_MANUAL), jsonUp);
+
+        playState = 0;
+    }
 }

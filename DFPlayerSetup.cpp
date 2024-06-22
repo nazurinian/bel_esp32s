@@ -14,14 +14,18 @@ void setupDFPlayer()
     Serial.println("Unable to begin:");
     Serial.println("1. Please recheck the connection!");
     Serial.println("2. Please insert the SD card!");
+
+    LCD.clear();
     lcdMonitor(0, 4);
     delay(1000);
   }
 
   LCD.clear();
+  lcdMonitor(0, 5);
+
   Serial.println(F("DFPlayer Mini online."));
 
-  myDFPlayer.volume(20);           // Set volume level (0-30)
+  myDFPlayer.volume(30);             // Set volume level (0-30)
   pinMode(DFPLAYER_BUSY_PIN, INPUT); // Mengatur pin BUSY sebagai input
 }
 

@@ -12,7 +12,7 @@
 void putarBelKelas(int infoPilihanPutar);
 void cekWaktu(JadwalData masuk, int jamKe);
 void putarBelOtomatis(JsonDocument &json);
-void cekPemutaranManualLebih1x(long currentMillis);
+void cekJumlahPemutaran();
 void putarBelManual(bool mainkan = false, int choice = 0);
 void stopAudioPlay(long currentMillis);
 

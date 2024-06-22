@@ -73,14 +73,18 @@ void lcdMonitor(int type, int error)
     else
     {
         // Daftar pilihan waktu offline di lcdMonitor 0 / tidak aktif
-        // 1. Masalah belum terhubung wifi
+        // 1. Masalah belum/tidak terhubung wifi
         // 2. Masalah sudah terhubung wifi tapi terputus (misal router bermasalah atau internet tidak ada / lost)
         // 3. Masalah koneksi ke server bermasalah (Firebase)
-        // 4. Masalah koneksi DFPlayer di awal setup
-        if (displayTime) {
+        // 4. Masalah koneksi DFPlayer (koneksi dan microsd)
+        // 5. Menyiapkan Alat... diawal Setup
+        if (displayTime)
+        {
             displayNextSchedule = true;
             displaySchedule = false;
-        } else {
+        }
+        else
+        {
             displaySchedule = true;
             displayNextSchedule = false;
         }
@@ -118,6 +122,13 @@ void lcdMonitor(int type, int error)
             LCD.print("Cek koneksi!");
             LCD.setCursor(0, 1);
             LCD.print("Masukan MicroSD");
+            break;
+        case 5:
+            Serial.println("Menyiapkan Alat...\n");
+            LCD.setCursor(0, 0);
+            LCD.print("Bel Sekolah By");
+            LCD.setCursor(0, 1);
+            LCD.print("Hikam Saif");
             break;
 
         default:
@@ -164,12 +175,11 @@ void serialMonitor()
         now = "Hari Libur";
         next = "Hari Senin";
     }
-
-    Serial.println("Jadwal bel saat ini : " + now);
-    Serial.println("Jadwal bel yang akan datang : " + next);
-
     // Mendapatkan waktu saat ini
     String formattedTime = timeClient.getFormattedTime();
     Serial.print("Time : ");
     Serial.println(formattedTime);
+
+    Serial.println("Jadwal bel saat ini : " + now);
+    Serial.println("Jadwal bel yang akan datang : " + next);
 }

@@ -5,7 +5,7 @@
       "includePath": [
         "${workspaceFolder}/**",
         "C:/Users/HikamSeif/Documents/Arduino/libraries/**",
-        "C:/Users/HikamSeif/AppData/Local/Arduino15/packages/esp32/hardware/esp32/2.0.16/**",
+        "C:/Users/HikamSeif/AppData/Local/Arduino15/packages/esp32/hardware/esp32/2.0.17/**",
         "C:/Users/HikamSeif/Documents/Arduino/libraries/ESP32Ping"
       ],
       "defines": [

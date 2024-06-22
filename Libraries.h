@@ -3,7 +3,6 @@
 #define LIBRARIES_H
 
 #include <LiquidCrystal_I2C.h>
-// #include <BluetoothSerial.h>
 
 #include <WiFi.h>
 #include <WiFiUdp.h>

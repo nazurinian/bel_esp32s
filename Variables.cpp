@@ -2,7 +2,6 @@
 #include "Variables.h"
 
 LiquidCrystal_I2C LCD(0x27, 16, 2);
-// BluetoothSerial SerialBT;
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", GMT_OFFSET_SEC);
@@ -24,13 +23,9 @@ bool hariLibur = false;
 unsigned long previousMillisA = 0;
 unsigned long previousMillisB = 0;
 unsigned long previousMillisC = 0;
-unsigned long previousMillisResetWifi = 0;
 unsigned long pvMillisObservePlayStatus = 0;
+unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
 const long interval = 1000;
-
-int button1State = 0;
-bool menuDisplayed = false;
-bool choiceMade = false;
 
 bool displayTime = true;
 bool displaySchedule = false;
@@ -39,15 +34,9 @@ bool clearDisplayOffline = true;
 
 int volumeLevel = 0;
 bool sedangMemutarAudio = false;
-
 int playState = 0; // 0: tidak memutar, 1: memutar pertama, 2: memutar kedua
-unsigned long previousLoopCheck = 0; // Untuk melacak waktu sebelumnya
-unsigned long intervalCheck = 200;   // Interval untuk memeriksa status DFPlayer
 
-String newSSIDBT = "";
-String newPasswordBT = "";
-
-bool btStatus = false;
+int button1State = 0;
 bool startWifiConfig = false;
 int button2State = 0;
 bool hotspotStatus = false;
@@ -59,7 +48,7 @@ bool button3WasPressed = false;
 unsigned long button1LastPressTime = 0;
 unsigned long button2LastPressTime = 0;
 unsigned long button3LastPressTime = 0;
-const long debounceInterval = 10;  // interval debounce dalam milidetik
+const long debounceInterval = 10; // interval debounce dalam milidetik
 
 // Array untuk menyimpan semua jadwal
 Waktu jadwal[JUMLAH_JADWAL] = {
@@ -147,8 +136,11 @@ Schedule jadwalSelanjutnya;
 String nowOrNext;
 String timeOrBel;
 
-int infoPilihanPutar;
-bool infoPlay;
 bool internetAvailable = true;
 bool dataFetched = false;
-// bool isPlaying = false;
+int infoPilihanPutar;
+bool infoPlay;
+bool isPlaying = false;
+int menitPutar = 0;
+int jumlahPutar = 0;
+bool mulaiPutarOnline = false;
