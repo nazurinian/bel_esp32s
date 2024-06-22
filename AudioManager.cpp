@@ -148,10 +148,30 @@ void cekJumlahPemutaran()
         delay(100);
 
         // Play 3 random audios from 6 to 8 (Do'a)
+        sedangMemutarAudio = true;
         myDFPlayer.play(random(6, 9));
-        playState = 0;
+        playState = 2;
         delay(500);
         break;
+
+    case 2: // Stop Putar
+        if (!digitalRead(DFPLAYER_BUSY_PIN))
+        {
+            delay(100);
+            return;
+        }
+        
+        delay(100);
+        setBelKelasTrue(false, 0);
+        delay(500);
+        if (!infoPlay)
+        {
+            playState = 0;
+            sedangMemutarAudio = false;
+            isPlaying = false;
+            mulaiPutarOnline = false;
+            Serial.println("Bel selesai diputar");
+        }
     }
 }
 
