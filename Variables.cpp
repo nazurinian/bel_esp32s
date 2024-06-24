@@ -144,3 +144,9 @@ bool isPlaying = false;
 int menitPutar = 0;
 int jumlahPutar = 0;
 bool mulaiPutarOnline = false;
+
+int previousSdStatus = 0;
+int numFilesInFolder1 = 0;
+int numFilesInFolder2 = 0;
+int numFilesInFolder3 = 0;
+int numFilesInFolder4 = 0;

@@ -215,12 +215,13 @@ void startConfigServer()
         return;
       }
 
-      if (!sedangMemutarAudio)
+      if (!sedangMemutarAudio && !isPlaying)
       {
         putarBelManual(true, bellChoice);
       } else
       {
-        request->send(400, "text/plain", "Gagal memutar Bel/Audio karena adanya pemutaran lain yang sedang berlangsung");
+        message = "Ada pemutaran lain yang sedang berlangsung";
+        request->send(200, "text/plain", message);
         return;
       }
 

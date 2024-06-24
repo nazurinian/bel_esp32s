@@ -112,7 +112,22 @@ bool checkSDStatus(int sdStatus)
   if (sdStatus == 0)
   {
     lcdMonitor(0, 4);
+    previousSdStatus = 0;
     return true;
+  }
+
+  if (previousSdStatus == 0)
+  {
+    // Folder 1 itu root jadi langusng dari 2,3 dan 4
+    myDFPlayer.readFileCountsInFolder(0);
+    myDFPlayer.readFileCountsInFolder(1);
+    delay(500);
+    numFilesInFolder1 = getNumFilesInFolder(2);
+    numFilesInFolder2 = getNumFilesInFolder(3);
+    numFilesInFolder3 = getNumFilesInFolder(4);
+    Serial.println("Jumlah audio pada masing-masing folder telah diperbarui");
+    Serial.println();
+    previousSdStatus = 1;
   }
   return false;
 }
@@ -194,6 +209,13 @@ void loop()
       handleAutomaticPlayback();
       if (!mulaiPutarOnline)
       {
+        if ((sedangMemutarAudio || isPlaying) && !infoPlay)
+        {
+          sedangMemutarAudio = false;
+          isPlaying = false;
+          mulaiPutarOnline = false;
+        }
+        
         putarBelManual(infoPlay, infoPilihanPutar);
       }
       
