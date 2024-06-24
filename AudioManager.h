@@ -8,6 +8,7 @@
 #include "FirebaseInitialSetup.h"
 #include "Config.h"
 #include "Variables.h"
+#include "DFPlayerSetup.h"
 
 void putarBelKelas(int infoPilihanPutar);
 void cekWaktu(JadwalData masuk, int jamKe);

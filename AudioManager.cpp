@@ -14,36 +14,27 @@ void putarBelKelas(int pilihan)
         // Bel Literasi Pagi | 3x
         myDFPlayer.play(3);
         delay(500);
-        // playState = 1;
-        // jumlahPutar = 3;
         break;
     case 2:
         // Bel Awal Masuk Pelajaran | 3x
         myDFPlayer.play(3);
         delay(500);
-        // playState = 1;
-        // jumlahPutar = 3;
         break;
     case 3:
         // Bel Pertengahan Pelajaran | 1x
         myDFPlayer.play(1);
         delay(500);
-        // playState = 1;
-        // jumlahPutar = 1;
         break;
     case 4:
         // Audio 5 Menit Sebelum Bel | Qur'an / Hadis
-        // dihitung dari 0 - sekian (5 Audio dari 5-9) 10 artinya 0-9
-        // Play 8 random audios from 9 to 16
-        myDFPlayer.play(random(9, 17)); // Random audio from 6 to 16 (inclusive)
+        // myDFPlayer.play(random(9, 17));
+        myDFPlayer.playFolder(1, random(1, numFilesInFolder1 + 1)); // Random audio dari Folder 1 (disini hanya ada 8 audio)
         delay(500);
         break;
     case 5:
         // Bel Istirahat | 2x
         myDFPlayer.play(2);
         delay(500);
-        // playState = 1;
-        // jumlahPutar = 2;
         break;
     case 6:
         // Bel Pulang | 4x
@@ -54,7 +45,9 @@ void putarBelKelas(int pilihan)
         break;
     case 7:
         // Alarm Keadaan Darurat
-        myDFPlayer.play(5);
+        // myDFPlayer.play(5);
+        // myDFPlayer.playFolder(3, 1); // Putar 1 audio dari Folder 3 (disini hanya ada 1 audio)
+        myDFPlayer.playFolder(3, random(1, numFilesInFolder3 + 1)); // Random audio dari Folder 2
         delay(500);
         break;
     default:
@@ -147,9 +140,9 @@ void cekJumlahPemutaran()
         }
         delay(100);
 
-        // Play 3 random audios from 6 to 8 (Do'a)
+        // Play 3 random audios from random (Do'a) (disini hanya ada 3 audio)
         sedangMemutarAudio = true;
-        myDFPlayer.play(random(6, 9));
+        myDFPlayer.playFolder(2, random(1, numFilesInFolder2 + 1)); // Random audio dari Folder 2
         playState = 2;
         delay(500);
         break;
@@ -174,108 +167,6 @@ void cekJumlahPemutaran()
         }
     }
 }
-
-/* void cekJumlahPemutaran()
-{
-    switch (playState)
-    {
-    case 0:
-        break;
-
-    case 1: // Putar Ke-1
-        playState = 2;
-        sedangMemutarAudio = true;
-        myDFPlayer.play(1);
-        break;
-
-    case 2: // Putar Ke-2
-        if (!digitalRead(DFPLAYER_BUSY_PIN))
-        {
-            delay(100);
-            return;
-        }
-        playState = 3;
-        sedangMemutarAudio = true;
-        myDFPlayer.play(1);
-        break;
-
-    case 3: // Putar Ke-3 atau Stop 2
-        if (!digitalRead(DFPLAYER_BUSY_PIN))
-        {
-            delay(100);
-            return;
-        }
-
-        playState = (jumlahPutar >= 3) ? 4 : 0;
-        delay(100);
-        if (playState == 0)
-        {
-            setBelKelasTrue(false, 0);
-            delay(500);
-            if (!infoPlay)
-            {
-                playState = 0;
-                sedangMemutarAudio = false;
-                isPlaying = false;
-                mulaiPutarOnline = false;
-                Serial.println("Bel selesai diputar");
-            }
-        }
-        else if (playState == 4)
-        {
-            sedangMemutarAudio = true;
-            myDFPlayer.play(1);
-        }
-        break;
-
-    case 4: // Putar Ke- 4 atau Stop 3
-        if (!digitalRead(DFPLAYER_BUSY_PIN))
-        {
-            delay(100);
-            return;
-        }
-
-        playState = (jumlahPutar == 4) ? 5 : 0;
-        delay(100);
-        if (playState == 0)
-        {
-            setBelKelasTrue(false, 0);
-            delay(500);
-            if (!infoPlay)
-            {
-                playState = 0;
-                sedangMemutarAudio = false;
-                isPlaying = false;
-                mulaiPutarOnline = false;
-                Serial.println("Bel selesai diputar");
-            }
-        }
-        else if (playState == 5)
-        {
-            sedangMemutarAudio = true;
-            myDFPlayer.play(1);
-        }
-        break;
-
-    case 5: // Stop 4
-        if (!digitalRead(DFPLAYER_BUSY_PIN))
-        {
-            delay(100);
-            return;
-        }
-        setBelKelasTrue(false, 0);
-        delay(500);
-        if (!infoPlay)
-        {
-            playState = 0;
-            sedangMemutarAudio = false;
-            isPlaying = false;
-            mulaiPutarOnline = false;
-            Serial.println("Bel selesai diputar");
-        }
-        break;
-    }
-} */
 
 void putarBelOtomatis(JsonDocument &json)
 {
@@ -406,42 +297,3 @@ void stopAudioPlay(long currentMillis)
         }
     }
 }
-
-/* void playRandomAudios()
-{
-    int firstSet[3];
-    int secondSet[8];
-    int used[11] = {0}; // Array to keep track of used audio indexes (6-16 inclusive)
-
-    // Select 3 random audios from 6 to 13
-    for (int i = 0; i < 3; i++)
-    {
-        int randomAudio;
-        do
-        {
-            randomAudio = random(6, 14); // Random audio from 6 to 13 (inclusive)
-        } while (used[randomAudio - 6]); // Ensure it hasn't been used
-        firstSet[i] = randomAudio;
-        used[randomAudio - 6] = 1; // Mark it as used
-        Serial.print(F("First set, playing audio: "));
-        Serial.println(randomAudio);
-        myDFPlayer.play(randomAudio);
-        delay(3000); // Adjust delay based on your audio length
-    }
-
-    // Select 8 random audios from 6 to 16, excluding already selected ones
-    for (int i = 0; i < 8; i++)
-    {
-        int randomAudio;
-        do
-        {
-            randomAudio = random(6, 17); // Random audio from 6 to 16 (inclusive)
-        } while (used[randomAudio - 6]); // Ensure it hasn't been used
-        secondSet[i] = randomAudio;
-        used[randomAudio - 6] = 1; // Mark it as used
-        Serial.print(F("Second set, playing audio: "));
-        Serial.println(randomAudio);
-        myDFPlayer.play(randomAudio);
-        delay(3000); // Adjust delay based on your audio length
-    }
-} */

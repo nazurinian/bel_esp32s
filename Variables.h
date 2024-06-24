@@ -82,4 +82,10 @@ extern int menitPutar;
 extern int jumlahPutar;
 extern bool mulaiPutarOnline;
 
+extern int previousSdStatus;
+extern int numFilesInFolder1;
+extern int numFilesInFolder2;
+extern int numFilesInFolder3;
+extern int numFilesInFolder4;
+
 #endif

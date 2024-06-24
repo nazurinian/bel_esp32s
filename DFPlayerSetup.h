@@ -11,5 +11,6 @@
 
 void setupDFPlayer();
 void volumeControl();
+int getNumFilesInFolder(int folder);
 
 #endif
